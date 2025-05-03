@@ -17,7 +17,7 @@ export default function Home() {
   } = useTimer();
 
   return (
-    <div className="container mx-auto px-4 py-8 flex flex-col items-center justify-center min-h-screen">
+    <div className="container mx-auto px-4 py-8 flex flex-col items-center justify-center min-h-screen max-w-full">
       <motion.header 
         className="w-full text-center mb-8"
         initial={{ opacity: 0, y: -20 }}
@@ -28,21 +28,25 @@ export default function Home() {
         <p className="text-lg text-foreground">Count down until it's time for school!</p>
       </motion.header>
       
-      <TimerCard
-        isRunning={isRunning}
-        remainingSeconds={remainingSeconds}
-        endTimeString={endTimeString}
-        isSoundEnabled={isSoundEnabled}
-        recentTimes={recentTimes}
-        onToggleTimer={toggleTimer}
-        onResetTimer={resetTimer}
-        onSetPresetTime={setPresetTime}
-        onUpdateEndTime={updateEndTime}
-        onToggleSound={toggleSound}
-      />
+      <div className="w-full max-w-4xl mx-auto flex flex-col md:flex-row justify-center items-center gap-8">
+        <div className="w-full md:w-auto flex-1 flex justify-center">
+          <TimerCard
+            isRunning={isRunning}
+            remainingSeconds={remainingSeconds}
+            endTimeString={endTimeString}
+            isSoundEnabled={isSoundEnabled}
+            recentTimes={recentTimes}
+            onToggleTimer={toggleTimer}
+            onResetTimer={resetTimer}
+            onSetPresetTime={setPresetTime}
+            onUpdateEndTime={updateEndTime}
+            onToggleSound={toggleSound}
+          />
+        </div>
+      </div>
       
       <motion.footer 
-        className="mt-8 text-center text-sm text-foreground opacity-70"
+        className="mt-12 text-center text-sm text-foreground opacity-70 w-full"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.5, delay: 0.5 }}

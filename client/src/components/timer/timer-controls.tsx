@@ -82,10 +82,10 @@ export function TimerControls({
       </div>
       
       {/* Quick preset buttons */}
-      <div className="grid grid-cols-3 gap-2">
+      <div className="grid grid-cols-3 gap-2 md:gap-3 lg:gap-4">
         <Button
           variant="secondary"
-          className="py-2 px-4 text-foreground font-semibold"
+          className="py-2 md:py-3 px-4 text-foreground font-semibold text-sm md:text-base lg:text-lg"
           style={{ backgroundColor: "hsl(54, 100%, 60%)" }}
           onClick={() => onSetPresetTime(15)}
         >
@@ -93,7 +93,7 @@ export function TimerControls({
         </Button>
         <Button
           variant="secondary"
-          className="py-2 px-4 text-foreground font-semibold"
+          className="py-2 md:py-3 px-4 text-foreground font-semibold text-sm md:text-base lg:text-lg"
           style={{ backgroundColor: "hsl(54, 100%, 60%)" }}
           onClick={() => onSetPresetTime(30)}
         >
@@ -101,7 +101,7 @@ export function TimerControls({
         </Button>
         <Button
           variant="secondary"
-          className="py-2 px-4 text-foreground font-semibold"
+          className="py-2 md:py-3 px-4 text-foreground font-semibold text-sm md:text-base lg:text-lg"
           style={{ backgroundColor: "hsl(54, 100%, 60%)" }}
           onClick={() => onSetPresetTime(45)}
         >

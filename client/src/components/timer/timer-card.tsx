@@ -36,8 +36,8 @@ export function TimerCard({
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
     >
-      <Card className="bg-white rounded-3xl shadow-xl p-6 w-full max-w-md transition-all duration-300 hover:shadow-2xl">
-        <CardContent className="p-0 space-y-6">
+      <Card className="bg-white rounded-3xl shadow-xl p-6 w-full max-w-full md:max-w-2xl lg:max-w-3xl transition-all duration-300 hover:shadow-2xl">
+        <CardContent className="p-0 space-y-6 md:space-y-8 lg:space-y-10">
           {/* Timer Display */}
           <div className="relative flex justify-center items-center mb-4">
             <DonutChart 
