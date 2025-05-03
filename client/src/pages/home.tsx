@@ -8,6 +8,7 @@ export default function Home() {
     remainingSeconds,
     endTimeString,
     isSoundEnabled,
+    recentTimes,
     toggleTimer,
     resetTimer,
     setPresetTime,
@@ -32,6 +33,7 @@ export default function Home() {
         remainingSeconds={remainingSeconds}
         endTimeString={endTimeString}
         isSoundEnabled={isSoundEnabled}
+        recentTimes={recentTimes}
         onToggleTimer={toggleTimer}
         onResetTimer={resetTimer}
         onSetPresetTime={setPresetTime}

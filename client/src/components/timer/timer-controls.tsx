@@ -1,13 +1,15 @@
 import { Button } from "@/components/ui/button";
 import { TimePicker } from "@/components/ui/time-picker";
-import { Play, Pause, RotateCcw } from "lucide-react";
+import { Play, Pause, RotateCcw, History, Clock } from "lucide-react";
 import { formatTime } from "@/lib/utils";
 import { motion } from "framer-motion";
+import { useState } from "react";
 
 interface TimerControlsProps {
   isRunning: boolean;
   remainingSeconds: number;
   endTimeString: string;
+  recentTimes: string[];
   onToggleTimer: () => void;
   onResetTimer: () => void;
   onSetPresetTime: (minutes: number) => void;
@@ -18,11 +20,14 @@ export function TimerControls({
   isRunning,
   remainingSeconds,
   endTimeString,
+  recentTimes,
   onToggleTimer,
   onResetTimer,
   onSetPresetTime,
   onUpdateEndTime
 }: TimerControlsProps) {
+  const [showRecentTimes, setShowRecentTimes] = useState(false);
+  
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center mb-2">
@@ -30,12 +35,51 @@ export function TimerControls({
         <div className="text-sm text-foreground opacity-70">1 hour maximum</div>
       </div>
       
-      {/* Time input control */}
-      <TimePicker
-        value={endTimeString}
-        onChange={onUpdateEndTime}
-        description="School Start"
-      />
+      {/* Time input control with recent times dropdown */}
+      <div className="relative">
+        <TimePicker
+          value={endTimeString}
+          onChange={onUpdateEndTime}
+          description="School Start"
+        />
+        
+        {/* Recent times toggle button - only show if we have recent times */}
+        {recentTimes.length > 0 && (
+          <Button
+            variant="outline"
+            size="sm"
+            className="absolute right-0 top-0 h-full rounded-l-none"
+            onClick={() => setShowRecentTimes(!showRecentTimes)}
+            aria-label="Show recent times"
+          >
+            <History className="h-4 w-4" />
+          </Button>
+        )}
+        
+        {/* Recent times dropdown */}
+        {showRecentTimes && recentTimes.length > 0 && (
+          <div className="absolute z-10 mt-1 w-full bg-white rounded-md shadow-lg border border-gray-200">
+            <div className="py-1 text-sm font-medium text-gray-700 px-3 border-b">
+              Recent Times
+            </div>
+            <div className="py-1">
+              {recentTimes.map((time, index) => (
+                <button
+                  key={index}
+                  className="w-full px-3 py-2 text-left text-sm hover:bg-gray-100 flex items-center"
+                  onClick={() => {
+                    onUpdateEndTime(time);
+                    setShowRecentTimes(false);
+                  }}
+                >
+                  <Clock className="h-3 w-3 mr-2 text-pink-500" />
+                  {time}
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
       
       {/* Quick preset buttons */}
       <div className="grid grid-cols-3 gap-2">

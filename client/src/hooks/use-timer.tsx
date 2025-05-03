@@ -12,23 +12,37 @@ export interface TimerState {
   remainingSeconds: number;
   endTimeString: string;
   isSoundEnabled: boolean;
+  recentTimes: string[];
 }
 
 const HOUR_IN_SECONDS = 3600;
 const DEFAULT_MINUTES = 45;
+const RECENT_TIMES_KEY = 'timer_recent_times';
+const MAX_RECENT_TIMES = 3;
 
 export function useTimer() {
   const [isRunning, setIsRunning] = useState(false);
   const [remainingSeconds, setRemainingSeconds] = useState(DEFAULT_MINUTES * 60);
   const [endTime, setEndTime] = useState<Date | null>(null);
   const [isSoundEnabled, setIsSoundEnabled] = useState(true);
+  const [recentTimes, setRecentTimes] = useState<string[]>(() => {
+    // Try to load recent times from localStorage
+    try {
+      const savedTimes = localStorage.getItem(RECENT_TIMES_KEY);
+      return savedTimes ? JSON.parse(savedTimes) : [];
+    } catch (error) {
+      console.error('Error loading recent times from localStorage:', error);
+      return [];
+    }
+  });
   
   // Create a ref so we can access the latest state in the interval
   const timerStateRef = useRef({
     isRunning,
     remainingSeconds,
     endTime,
-    isSoundEnabled
+    isSoundEnabled,
+    recentTimes
   });
   
   // Update the ref whenever the state changes
@@ -37,14 +51,24 @@ export function useTimer() {
       isRunning,
       remainingSeconds,
       endTime,
-      isSoundEnabled
+      isSoundEnabled,
+      recentTimes
     };
-  }, [isRunning, remainingSeconds, endTime, isSoundEnabled]);
+  }, [isRunning, remainingSeconds, endTime, isSoundEnabled, recentTimes]);
   
   // Initialize the timer with default end time (current time + DEFAULT_MINUTES)
   useEffect(() => {
     initializeDefaultEndTime();
   }, []);
+  
+  // Save recent times to localStorage whenever they change
+  useEffect(() => {
+    try {
+      localStorage.setItem(RECENT_TIMES_KEY, JSON.stringify(recentTimes));
+    } catch (error) {
+      console.error('Error saving recent times to localStorage:', error);
+    }
+  }, [recentTimes]);
   
   // Set up the countdown interval
   useEffect(() => {
@@ -119,6 +143,21 @@ export function useTimer() {
     setEndTime(newEndTime);
   }, []);
   
+  // Add a time string to the recent times list
+  const addToRecentTimes = useCallback((timeString: string) => {
+    setRecentTimes(prev => {
+      // Don't add if already in the list
+      if (prev.includes(timeString)) {
+        // Move the used time to the front of the list
+        return [timeString, ...prev.filter(t => t !== timeString)];
+      }
+      
+      // Add new time to the beginning and limit to MAX_RECENT_TIMES
+      const newTimes = [timeString, ...prev].slice(0, MAX_RECENT_TIMES);
+      return newTimes;
+    });
+  }, []);
+  
   const updateEndTime = useCallback((timeString: string) => {
     const newEndTime = timeStringToDate(timeString);
     
@@ -132,7 +171,10 @@ export function useTimer() {
     
     setRemainingSeconds(cappedSeconds);
     setEndTime(newEndTime);
-  }, []);
+    
+    // Add this time to recent times
+    addToRecentTimes(timeString);
+  }, [addToRecentTimes]);
   
   const toggleSound = useCallback(() => {
     setIsSoundEnabled((prev) => !prev);
@@ -145,6 +187,7 @@ export function useTimer() {
     remainingSeconds,
     endTimeString,
     isSoundEnabled,
+    recentTimes,
     toggleTimer,
     resetTimer,
     setPresetTime,
