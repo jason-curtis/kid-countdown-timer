@@ -48,20 +48,24 @@ export function DonutChart({
         {/* 15-minute markers (4 sections) */}
         <g>
           {/* Top marker (0/60 min) */}
-          <line x1="50" y1="5" x2="50" y2="15" stroke="#333" strokeWidth="2" />
-          <text x="50" y="3" textAnchor="middle" fill="#333" fontSize="4" fontWeight="bold">0</text>
+          <line x1="50" y1="5" x2="50" y2="15" stroke="#333" strokeWidth="2.5" />
+          <circle cx="50" cy="2" r="5" fill="white" stroke="#333" strokeWidth="0.5" />
+          <text x="50" y="4" textAnchor="middle" fill="#333" fontSize="6" fontWeight="bold">0</text>
           
           {/* Right marker (15 min) */}
-          <line x1="85" y1="50" x2="95" y2="50" stroke="#333" strokeWidth="2" />
-          <text x="97" y="51" textAnchor="start" fill="#333" fontSize="4" fontWeight="bold">15</text>
+          <line x1="85" y1="50" x2="95" y2="50" stroke="#333" strokeWidth="2.5" />
+          <circle cx="102" cy="50" r="7" fill="white" stroke="#333" strokeWidth="0.5" />
+          <text x="102" y="52" textAnchor="middle" fill="#333" fontSize="6" fontWeight="bold">15</text>
           
           {/* Bottom marker (30 min) */}
-          <line x1="50" y1="85" x2="50" y2="95" stroke="#333" strokeWidth="2" />
-          <text x="50" y="99" textAnchor="middle" fill="#333" fontSize="4" fontWeight="bold">30</text>
+          <line x1="50" y1="85" x2="50" y2="95" stroke="#333" strokeWidth="2.5" />
+          <circle cx="50" cy="102" r="5" fill="white" stroke="#333" strokeWidth="0.5" />
+          <text x="50" y="104" textAnchor="middle" fill="#333" fontSize="6" fontWeight="bold">30</text>
           
           {/* Left marker (45 min) */}
-          <line x1="5" y1="50" x2="15" y2="50" stroke="#333" strokeWidth="2" />
-          <text x="3" y="51" textAnchor="end" fill="#333" fontSize="4" fontWeight="bold">45</text>
+          <line x1="5" y1="50" x2="15" y2="50" stroke="#333" strokeWidth="2.5" />
+          <circle cx="-2" cy="50" r="7" fill="white" stroke="#333" strokeWidth="0.5" />
+          <text x="-2" y="52" textAnchor="middle" fill="#333" fontSize="6" fontWeight="bold">45</text>
         </g>
         
         {/* Gradient definition for timer circle */}
