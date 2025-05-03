@@ -21,7 +21,7 @@ export function DonutChart({
   
   return (
     <div className={cn("relative", className)}>
-      <svg className="w-64 h-64" viewBox="0 0 100 100">
+      <svg className="w-64 h-64" viewBox="-10 -10 120 120">
         {/* Outer background circle */}
         <circle 
           cx="50" cy="50" r="45" 
@@ -45,27 +45,30 @@ export function DonutChart({
           transition={{ duration: 0.5, ease: "easeInOut" }}
         />
         
+        {/* Background for better contrast with ticker text */}
+        <rect x="-10" y="-10" width="120" height="120" fill="white" opacity="0.35" />
+        
         {/* 15-minute markers (4 sections) */}
         <g>
           {/* Top marker (0/60 min) */}
           <line x1="50" y1="5" x2="50" y2="15" stroke="#333" strokeWidth="2.5" />
-          <circle cx="50" cy="2" r="5" fill="white" stroke="#333" strokeWidth="0.5" />
-          <text x="50" y="4" textAnchor="middle" fill="#333" fontSize="6" fontWeight="bold">0</text>
+          <rect x="45" y="-9" width="10" height="10" fill="white" rx="2" />
+          <text x="50" y="-2" textAnchor="middle" fill="#333" fontSize="8" fontWeight="bold">0</text>
           
           {/* Right marker (15 min) */}
           <line x1="85" y1="50" x2="95" y2="50" stroke="#333" strokeWidth="2.5" />
-          <circle cx="102" cy="50" r="7" fill="white" stroke="#333" strokeWidth="0.5" />
-          <text x="102" y="52" textAnchor="middle" fill="#333" fontSize="6" fontWeight="bold">15</text>
+          <rect x="105" y="45" width="15" height="10" fill="white" rx="2" />
+          <text x="113" y="52" textAnchor="middle" fill="#333" fontSize="8" fontWeight="bold">15</text>
           
           {/* Bottom marker (30 min) */}
           <line x1="50" y1="85" x2="50" y2="95" stroke="#333" strokeWidth="2.5" />
-          <circle cx="50" cy="102" r="5" fill="white" stroke="#333" strokeWidth="0.5" />
-          <text x="50" y="104" textAnchor="middle" fill="#333" fontSize="6" fontWeight="bold">30</text>
+          <rect x="45" y="99" width="10" height="10" fill="white" rx="2" />
+          <text x="50" y="107" textAnchor="middle" fill="#333" fontSize="8" fontWeight="bold">30</text>
           
           {/* Left marker (45 min) */}
           <line x1="5" y1="50" x2="15" y2="50" stroke="#333" strokeWidth="2.5" />
-          <circle cx="-2" cy="50" r="7" fill="white" stroke="#333" strokeWidth="0.5" />
-          <text x="-2" y="52" textAnchor="middle" fill="#333" fontSize="6" fontWeight="bold">45</text>
+          <rect x="-20" y="45" width="15" height="10" fill="white" rx="2" />
+          <text x="-12" y="52" textAnchor="middle" fill="#333" fontSize="8" fontWeight="bold">45</text>
         </g>
         
         {/* Gradient definition for timer circle */}
