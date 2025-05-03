@@ -21,7 +21,7 @@ export function DonutChart({
   
   return (
     <div className={cn("relative", className)}>
-      <svg className="w-64 h-64" viewBox="0 0 120 120">
+      <svg className="w-64 h-64" viewBox="-5 -5 130 130">
         {/* Outer background circle */}
         <circle 
           cx="60" cy="60" r="35" 
@@ -48,23 +48,23 @@ export function DonutChart({
         {/* 15-minute markers (4 sections) */}
         <g>
           {/* Top marker (0/60 min) */}
-          <line x1="60" y1="20" x2="60" y2="15" stroke="#333" strokeWidth="2" />
-          <text x="60" y="10" textAnchor="middle" fill="#333" fontSize="10" fontWeight="bold" 
+          <line x1="60" y1="20" x2="60" y2="15" stroke="#333" strokeWidth="1.5" />
+          <text x="60" y="10" textAnchor="middle" fill="#333" fontSize="7" fontWeight="bold" 
                 stroke="white" strokeWidth="0.5" paintOrder="stroke">0</text>
           
           {/* Right marker (15 min) */}
-          <line x1="100" y1="60" x2="105" y2="60" stroke="#333" strokeWidth="2" />
-          <text x="110" y="63" textAnchor="start" fill="#333" fontSize="10" fontWeight="bold"
+          <line x1="100" y1="60" x2="105" y2="60" stroke="#333" strokeWidth="1.5" />
+          <text x="108" y="63" textAnchor="start" fill="#333" fontSize="7" fontWeight="bold"
                 stroke="white" strokeWidth="0.5" paintOrder="stroke">15</text>
           
           {/* Bottom marker (30 min) */}
-          <line x1="60" y1="100" x2="60" y2="105" stroke="#333" strokeWidth="2" />
-          <text x="60" y="115" textAnchor="middle" fill="#333" fontSize="10" fontWeight="bold"
+          <line x1="60" y1="100" x2="60" y2="105" stroke="#333" strokeWidth="1.5" />
+          <text x="60" y="113" textAnchor="middle" fill="#333" fontSize="7" fontWeight="bold"
                 stroke="white" strokeWidth="0.5" paintOrder="stroke">30</text>
           
           {/* Left marker (45 min) */}
-          <line x1="20" y1="60" x2="15" y2="60" stroke="#333" strokeWidth="2" />
-          <text x="10" y="63" textAnchor="end" fill="#333" fontSize="10" fontWeight="bold"
+          <line x1="20" y1="60" x2="15" y2="60" stroke="#333" strokeWidth="1.5" />
+          <text x="12" y="63" textAnchor="end" fill="#333" fontSize="7" fontWeight="bold"
                 stroke="white" strokeWidth="0.5" paintOrder="stroke">45</text>
         </g>
         
