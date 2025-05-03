@@ -96,32 +96,4 @@ export function TimerControls({
   );
 }
 
-interface TimerDisplayProps {
-  remainingSeconds: number;
-  isRunning: boolean;
-}
 
-export function TimerDisplay({ remainingSeconds, isRunning }: TimerDisplayProps) {
-  const formattedTime = formatTime(remainingSeconds);
-  
-  return (
-    <div className="absolute inset-0 flex flex-col items-center justify-center text-center">
-      <div className="text-4xl font-bold mb-1">
-        {formattedTime}
-      </div>
-      <div className="text-sm opacity-70">minutes remaining</div>
-      
-      {/* Timer status indicator */}
-      <div className={`mt-4 text-xs px-3 py-1 rounded-full font-semibold inline-flex items-center ${
-        isRunning ? 'bg-[hsl(95,55%,55%)] text-white' : 'bg-[hsl(0,100%,65%)] text-white'
-      }`}>
-        <motion.span 
-          className="h-2 w-2 bg-white rounded-full mr-1"
-          animate={{ opacity: isRunning ? [1, 0.4, 1] : 1 }}
-          transition={{ duration: 1.5, repeat: isRunning ? Infinity : 0 }}
-        />
-        {isRunning ? 'Running' : 'Paused'}
-      </div>
-    </div>
-  );
-}

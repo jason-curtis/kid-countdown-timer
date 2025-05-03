@@ -13,7 +13,7 @@ export function DonutChart({
   className 
 }: DonutChartProps) {
   const HOUR_IN_SECONDS = 3600;
-  const CIRCUMFERENCE = 2 * Math.PI * 45; // 2πr where r=45 (matches SVG circle radius)
+  const CIRCUMFERENCE = 2 * Math.PI * 35; // 2πr where r=35 (smaller to leave space for ticks)
   
   // Calculate the percentage remaining of a full hour
   const percentRemaining = remainingSeconds / HOUR_IN_SECONDS;
@@ -21,54 +21,51 @@ export function DonutChart({
   
   return (
     <div className={cn("relative", className)}>
-      <svg className="w-64 h-64" viewBox="-10 -10 120 120">
+      <svg className="w-64 h-64" viewBox="0 0 120 120">
         {/* Outer background circle */}
         <circle 
-          cx="50" cy="50" r="45" 
+          cx="60" cy="60" r="35" 
           fill="none" 
           stroke="#f0f0f0" 
-          strokeWidth="10"
+          strokeWidth="8"
         />
         
         {/* Timer progress donut segment - start from top (counterclockwise) */}
         <motion.circle 
-          cx="50" cy="50" r="45" 
+          cx="60" cy="60" r="35" 
           fill="none" 
           stroke="url(#timerGradient)" 
-          strokeWidth="10"
+          strokeWidth="8"
           strokeDasharray={CIRCUMFERENCE}
           strokeDashoffset={dashOffset}
           strokeLinecap="round"
-          transform="rotate(-90, 50, 50)"
+          transform="rotate(-90, 60, 60)"
           initial={{ strokeDashoffset: 0 }}
           animate={{ strokeDashoffset: dashOffset }}
           transition={{ duration: 0.5, ease: "easeInOut" }}
         />
         
-        {/* Background for better contrast with ticker text */}
-        <rect x="-10" y="-10" width="120" height="120" fill="white" opacity="0.35" />
-        
         {/* 15-minute markers (4 sections) */}
         <g>
           {/* Top marker (0/60 min) */}
-          <line x1="50" y1="5" x2="50" y2="15" stroke="#333" strokeWidth="2.5" />
-          <rect x="45" y="-9" width="10" height="10" fill="white" rx="2" />
-          <text x="50" y="-2" textAnchor="middle" fill="#333" fontSize="8" fontWeight="bold">0</text>
+          <line x1="60" y1="20" x2="60" y2="15" stroke="#333" strokeWidth="2" />
+          <text x="60" y="10" textAnchor="middle" fill="#333" fontSize="10" fontWeight="bold" 
+                stroke="white" strokeWidth="0.5" paintOrder="stroke">0</text>
           
           {/* Right marker (15 min) */}
-          <line x1="85" y1="50" x2="95" y2="50" stroke="#333" strokeWidth="2.5" />
-          <rect x="105" y="45" width="15" height="10" fill="white" rx="2" />
-          <text x="113" y="52" textAnchor="middle" fill="#333" fontSize="8" fontWeight="bold">15</text>
+          <line x1="100" y1="60" x2="105" y2="60" stroke="#333" strokeWidth="2" />
+          <text x="110" y="63" textAnchor="start" fill="#333" fontSize="10" fontWeight="bold"
+                stroke="white" strokeWidth="0.5" paintOrder="stroke">15</text>
           
           {/* Bottom marker (30 min) */}
-          <line x1="50" y1="85" x2="50" y2="95" stroke="#333" strokeWidth="2.5" />
-          <rect x="45" y="99" width="10" height="10" fill="white" rx="2" />
-          <text x="50" y="107" textAnchor="middle" fill="#333" fontSize="8" fontWeight="bold">30</text>
+          <line x1="60" y1="100" x2="60" y2="105" stroke="#333" strokeWidth="2" />
+          <text x="60" y="115" textAnchor="middle" fill="#333" fontSize="10" fontWeight="bold"
+                stroke="white" strokeWidth="0.5" paintOrder="stroke">30</text>
           
           {/* Left marker (45 min) */}
-          <line x1="5" y1="50" x2="15" y2="50" stroke="#333" strokeWidth="2.5" />
-          <rect x="-20" y="45" width="15" height="10" fill="white" rx="2" />
-          <text x="-12" y="52" textAnchor="middle" fill="#333" fontSize="8" fontWeight="bold">45</text>
+          <line x1="20" y1="60" x2="15" y2="60" stroke="#333" strokeWidth="2" />
+          <text x="10" y="63" textAnchor="end" fill="#333" fontSize="10" fontWeight="bold"
+                stroke="white" strokeWidth="0.5" paintOrder="stroke">45</text>
         </g>
         
         {/* Gradient definition for timer circle */}

@@ -1,6 +1,7 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { DonutChart } from "./donut-chart";
-import { TimerControls, TimerDisplay } from "./timer-controls";
+import { TimerControls } from "./timer-controls";
+import { TimerDisplay } from "./timer-display";
 import { SoundControls } from "./sound-controls";
 import { motion } from "framer-motion";
 
