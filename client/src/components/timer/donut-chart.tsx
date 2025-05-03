@@ -21,7 +21,7 @@ export function DonutChart({
   
   return (
     <div className={cn("relative", className)}>
-      <svg className="w-64 h-64 transform -rotate-90" viewBox="0 0 100 100">
+      <svg className="w-64 h-64" viewBox="0 0 100 100">
         {/* Outer background circle */}
         <circle 
           cx="50" cy="50" r="45" 
@@ -30,7 +30,7 @@ export function DonutChart({
           strokeWidth="10"
         />
         
-        {/* Timer progress donut segment */}
+        {/* Timer progress donut segment - start from top (counterclockwise) */}
         <motion.circle 
           cx="50" cy="50" r="45" 
           fill="none" 
@@ -39,6 +39,7 @@ export function DonutChart({
           strokeDasharray={CIRCUMFERENCE}
           strokeDashoffset={dashOffset}
           strokeLinecap="round"
+          transform="rotate(-90, 50, 50)"
           initial={{ strokeDashoffset: 0 }}
           animate={{ strokeDashoffset: dashOffset }}
           transition={{ duration: 0.5, ease: "easeInOut" }}

@@ -4,8 +4,9 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Plus, Minus } from "lucide-react";
 
-interface TimePickerProps
-  extends React.InputHTMLAttributes<HTMLInputElement> {
+interface TimePickerProps {
+  className?: string;
+  value?: string;
   onChange: (value: string) => void;
   label?: string;
   description?: string;
@@ -17,7 +18,7 @@ export function TimePicker({
   value,
   label,
   description,
-  ...props
+
 }: TimePickerProps) {
   const inputRef = React.useRef<HTMLInputElement>(null);
 
@@ -82,7 +83,6 @@ export function TimePicker({
             className="text-center bg-transparent text-xl font-semibold w-32 focus:outline-none border-none"
             value={value as string}
             onChange={(e) => onChange(e.target.value)}
-            {...props}
           />
           {description && (
             <div className="text-xs mt-1 text-foreground opacity-70">{description}</div>

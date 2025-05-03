@@ -1,6 +1,7 @@
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { Bell, Clock, Volume2 } from "lucide-react";
+import { speak } from "@/lib/utils";
 
 interface SoundControlsProps {
   isSoundEnabled: boolean;
@@ -11,6 +12,18 @@ export function SoundControls({
   isSoundEnabled, 
   onToggleSound 
 }: SoundControlsProps) {
+  const previewFiveMinWarning = () => {
+    if (isSoundEnabled) {
+      speak("5 minutes remaining until school time!");
+    }
+  };
+
+  const previewTimeUpAlert = () => {
+    if (isSoundEnabled) {
+      speak("Time is up! It's time for school!");
+    }
+  };
+
   return (
     <div className="border-t border-gray-100 pt-4">
       <div className="flex items-center justify-between">
@@ -28,12 +41,27 @@ export function SoundControls({
       </div>
       
       <div className="mt-2 text-sm flex flex-wrap gap-2">
-        <div className="bg-[#ffe5ee] px-3 py-1 rounded-full inline-flex items-center" style={{ color: "hsl(339, 100%, 55%)" }}>
+        <button 
+          onClick={previewFiveMinWarning}
+          disabled={!isSoundEnabled}
+          className={`bg-[#ffe5ee] px-3 py-1 rounded-full inline-flex items-center ${
+            isSoundEnabled ? 'cursor-pointer hover:bg-[#ffd6e5] active:bg-[#ffc6db]' : 'opacity-50 cursor-not-allowed'
+          }`} 
+          style={{ color: "hsl(339, 100%, 55%)" }}
+        >
           <Bell className="h-3 w-3 mr-1" /> 5 min warning
-        </div>
-        <div className="bg-[#e8f5d9] px-3 py-1 rounded-full inline-flex items-center" style={{ color: "hsl(95, 55%, 35%)" }}>
+        </button>
+        
+        <button 
+          onClick={previewTimeUpAlert}
+          disabled={!isSoundEnabled}
+          className={`bg-[#e8f5d9] px-3 py-1 rounded-full inline-flex items-center ${
+            isSoundEnabled ? 'cursor-pointer hover:bg-[#daecc7] active:bg-[#cee3b5]' : 'opacity-50 cursor-not-allowed'
+          }`} 
+          style={{ color: "hsl(95, 55%, 35%)" }}
+        >
           <Clock className="h-3 w-3 mr-1" /> Time's up alert
-        </div>
+        </button>
       </div>
     </div>
   );

@@ -106,15 +106,9 @@ export function TimerDisplay({ remainingSeconds, isRunning }: TimerDisplayProps)
   
   return (
     <div className="absolute inset-0 flex flex-col items-center justify-center text-center">
-      <motion.div 
-        className="text-4xl font-bold mb-1"
-        key={formattedTime}
-        initial={{ opacity: 0.8, scale: 0.9 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 0.2 }}
-      >
+      <div className="text-4xl font-bold mb-1">
         {formattedTime}
-      </motion.div>
+      </div>
       <div className="text-sm opacity-70">minutes remaining</div>
       
       {/* Timer status indicator */}
