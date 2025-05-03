@@ -63,29 +63,29 @@ export function TimePicker({
   return (
     <div className={cn("space-y-1", className)}>
       {label && <div className="text-sm font-medium">{label}</div>}
-      <div className="flex items-center justify-between bg-muted rounded-xl p-2">
+      <div className="flex items-center justify-between bg-muted rounded-xl p-2 md:p-3 lg:p-4">
         <Button 
           type="button"
           variant="default"
           size="icon"
-          className="w-10 h-10 rounded-lg text-white hover:bg-[hsl(339,100%,65%)]"
+          className="w-10 h-10 md:w-12 md:h-12 lg:w-14 lg:h-14 rounded-lg text-white hover:bg-[hsl(339,100%,65%)]"
           style={{ backgroundColor: "hsl(339, 100%, 75%)" }}
           onClick={handleDecrement}
           aria-label="Decrease time"
         >
-          <Minus className="h-4 w-4" />
+          <Minus className="h-4 w-4 md:h-5 md:w-5 lg:h-6 lg:w-6" />
         </Button>
         
         <div className="text-center">
           <Input
             ref={inputRef}
             type="time"
-            className="text-center bg-transparent text-xl font-semibold w-32 focus:outline-none border-none"
+            className="text-center bg-transparent text-xl md:text-2xl lg:text-3xl font-semibold w-32 md:w-40 lg:w-48 focus:outline-none border-none"
             value={value as string}
             onChange={(e) => onChange(e.target.value)}
           />
           {description && (
-            <div className="text-xs mt-1 text-foreground opacity-70">{description}</div>
+            <div className="text-xs md:text-sm lg:text-base mt-1 md:mt-2 text-foreground opacity-70">{description}</div>
           )}
         </div>
         
@@ -93,12 +93,12 @@ export function TimePicker({
           type="button"
           variant="default"
           size="icon"
-          className="w-10 h-10 rounded-lg text-white hover:bg-[hsl(339,100%,65%)]"
+          className="w-10 h-10 md:w-12 md:h-12 lg:w-14 lg:h-14 rounded-lg text-white hover:bg-[hsl(339,100%,65%)]"
           style={{ backgroundColor: "hsl(339, 100%, 75%)" }}
           onClick={handleIncrement}
           aria-label="Increase time"
         >
-          <Plus className="h-4 w-4" />
+          <Plus className="h-4 w-4 md:h-5 md:w-5 lg:h-6 lg:w-6" />
         </Button>
       </div>
     </div>

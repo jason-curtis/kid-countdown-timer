@@ -29,10 +29,10 @@ export function TimerControls({
   const [showRecentTimes, setShowRecentTimes] = useState(false);
   
   return (
-    <div className="space-y-6">
-      <div className="flex justify-between items-center mb-2">
-        <h2 className="text-xl font-bold text-foreground">Set End Time</h2>
-        <div className="text-sm text-foreground opacity-70">1 hour maximum</div>
+    <div className="space-y-6 md:space-y-8 lg:space-y-10">
+      <div className="flex justify-between items-center mb-2 md:mb-3 lg:mb-4">
+        <h2 className="text-xl md:text-2xl lg:text-3xl font-bold text-foreground">Set End Time</h2>
+        <div className="text-sm md:text-base lg:text-lg text-foreground opacity-70">1 hour maximum</div>
       </div>
       
       {/* Time input control with recent times dropdown */}
@@ -110,30 +110,30 @@ export function TimerControls({
       </div>
       
       {/* Primary control buttons */}
-      <div className="flex gap-4">
+      <div className="flex gap-4 md:gap-5 lg:gap-6">
         <Button
-          className="flex-1 py-6 rounded-xl font-bold text-lg h-auto text-white hover:bg-[hsl(95,55%,45%)]"
+          className="flex-1 py-6 md:py-7 lg:py-8 rounded-xl font-bold text-lg md:text-xl lg:text-2xl h-auto text-white hover:bg-[hsl(95,55%,45%)]"
           style={{ backgroundColor: "hsl(95, 55%, 55%)" }}
           onClick={onToggleTimer}
         >
           {isRunning ? (
             <>
-              <Pause className="mr-2 h-5 w-5" /> Pause
+              <Pause className="mr-2 h-5 w-5 md:h-6 md:w-6 lg:h-7 lg:w-7" /> Pause
             </>
           ) : (
             <>
-              <Play className="mr-2 h-5 w-5" /> Start
+              <Play className="mr-2 h-5 w-5 md:h-6 md:w-6 lg:h-7 lg:w-7" /> Start
             </>
           )}
         </Button>
         
         <Button
           variant="outline"
-          className="w-14 py-6 bg-muted text-foreground rounded-xl font-bold text-lg h-auto hover:bg-gray-200"
+          className="w-14 md:w-16 lg:w-20 py-6 md:py-7 lg:py-8 bg-muted text-foreground rounded-xl font-bold text-lg h-auto hover:bg-gray-200"
           onClick={onResetTimer}
           aria-label="Reset timer"
         >
-          <RotateCcw className="h-5 w-5" />
+          <RotateCcw className="h-5 w-5 md:h-6 md:w-6 lg:h-7 lg:w-7" />
         </Button>
       </div>
     </div>
