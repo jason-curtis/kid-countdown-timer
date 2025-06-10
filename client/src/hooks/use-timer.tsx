@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from "react";
-import { speak, formatTime, HOUR_IN_SECONDS } from "@/lib/utils";
+import { speak, formatTime, formatTimeForInput, timeStringToDate, HOUR_IN_SECONDS } from "@/lib/utils";
 
 export interface TimerState {
   remainingSeconds: number;
@@ -8,32 +8,6 @@ export interface TimerState {
   recentTimes: string[];
   timerPurpose: string;
   isCompleted: boolean;
-}
-
-// Formats time from Date object to HH:MM format for input
-function formatTimeForInput(date: Date): string {
-  const hours = date.getHours().toString().padStart(2, '0');
-  const minutes = date.getMinutes().toString().padStart(2, '0');
-  return `${hours}:${minutes}`;
-}
-
-// Calculate remaining time in seconds between now and a target end time
-function calculateRemainingTime(endTime: Date): number {
-  const now = new Date();
-  const diffMs = endTime.getTime() - now.getTime();
-  return Math.max(0, Math.floor(diffMs / 1000));
-}
-
-// Converts HH:MM time string to a Date object
-function timeStringToDate(timeString: string): Date {
-  const [hours, minutes] = timeString.split(':').map(Number);
-  const date = new Date();
-  date.setHours(hours, minutes, 0, 0);
-  // If the time is in the past, assume it's for tomorrow
-  if (date < new Date()) {
-    date.setDate(date.getDate() + 1);
-  }
-  return date;
 }
 
 const DEFAULT_MINUTES = 30;

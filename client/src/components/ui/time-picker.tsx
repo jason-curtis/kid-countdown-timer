@@ -1,8 +1,8 @@
 import { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { cn } from "@/lib/utils";
-import { Plus, Minus, Clock, ChevronDown } from "lucide-react";
+import { cn, timeStringToDate, HOUR_IN_SECONDS } from "@/lib/utils";
+import { Plus, Minus, Clock, ChevronDown, AlertTriangle } from "lucide-react";
 
 interface TimePickerProps {
   value: string; // HH:MM format
@@ -13,8 +13,22 @@ interface TimePickerProps {
 
 export function TimePicker({ value, onChange, recentTimes = [], className }: TimePickerProps) {
   const [isOpen, setIsOpen] = useState(false);
+  const [showWarning, setShowWarning] = useState(false);
   const [hours, minutes] = value.split(':').map(Number);
   const dropdownRef = useRef<HTMLDivElement>(null);
+
+  // Check if current time would exceed 1 hour limit
+  const checkTimeLimit = (timeString: string) => {
+    try {
+      const targetTime = timeStringToDate(timeString);
+      const now = new Date();
+      const diffMs = targetTime.getTime() - now.getTime();
+      const diffSeconds = Math.max(0, Math.floor(diffMs / 1000));
+      return diffSeconds > HOUR_IN_SECONDS;
+    } catch {
+      return false;
+    }
+  };
 
   // Close dropdown when clicking outside
   useEffect(() => {
@@ -29,6 +43,12 @@ export function TimePicker({ value, onChange, recentTimes = [], className }: Tim
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, []);
+
+  // Check for time limit warning when value changes
+  useEffect(() => {
+    const exceedsLimit = checkTimeLimit(value);
+    setShowWarning(exceedsLimit);
+  }, [value]);
 
   const updateTime = (newHours: number, newMinutes: number) => {
     const formattedTime = `${newHours.toString().padStart(2, '0')}:${newMinutes.toString().padStart(2, '0')}`;
@@ -68,7 +88,10 @@ export function TimePicker({ value, onChange, recentTimes = [], className }: Tim
 
   return (
     <div className={cn("relative", className)} ref={dropdownRef}>
-      <div className="flex items-center space-x-2 md:space-x-3 lg:space-x-4 bg-card p-3 md:p-4 lg:p-5 rounded-2xl border shadow-sm">
+      <div className={cn(
+        "flex items-center space-x-2 md:space-x-3 lg:space-x-4 bg-card p-3 md:p-4 lg:p-5 rounded-2xl border shadow-sm transition-colors",
+        showWarning && "border-amber-400 bg-amber-50"
+      )}>
         <Clock className="h-5 w-5 md:h-6 md:w-6 lg:h-7 lg:w-7 text-primary" />
 
         {/* Hours */}
@@ -130,7 +153,10 @@ export function TimePicker({ value, onChange, recentTimes = [], className }: Tim
             value={value}
             onChange={handleInputChange}
             placeholder="HH:MM"
-            className="w-16 md:w-20 lg:w-24 text-center text-sm md:text-base lg:text-lg border-none focus:outline-none bg-muted"
+            className={cn(
+              "w-16 md:w-20 lg:w-24 text-center text-sm md:text-base lg:text-lg border-none focus:outline-none bg-muted",
+              showWarning && "bg-amber-100"
+            )}
           />
         </div>
 
@@ -147,6 +173,16 @@ export function TimePicker({ value, onChange, recentTimes = [], className }: Tim
           </Button>
         )}
       </div>
+
+      {/* Warning message for time limit */}
+      {showWarning && (
+        <div className="mt-2 flex items-center gap-2 p-2 bg-amber-100 border border-amber-200 rounded-lg">
+          <AlertTriangle className="h-4 w-4 text-amber-600" />
+          <span className="text-sm text-amber-800">
+            Timer will be capped at 1 hour maximum
+          </span>
+        </div>
+      )}
 
       {/* Recent times dropdown */}
       {isOpen && recentTimes.length > 0 && (
