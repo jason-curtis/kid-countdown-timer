@@ -15,6 +15,7 @@ interface TimerCardProps {
   isSoundEnabled: boolean;
   recentTimes: string[];
   timerPurpose: string;
+  isCompleted: boolean;
   onSetPresetTime: (minutes: number) => void;
   onUpdateEndTime: (timeString: string) => void;
   onToggleSound: () => void;
@@ -27,6 +28,7 @@ export function TimerCard({
   isSoundEnabled,
   recentTimes,
   timerPurpose,
+  isCompleted,
   onSetPresetTime,
   onUpdateEndTime,
   onToggleSound,
@@ -111,6 +113,7 @@ export function TimerCard({
             />
             <TimerDisplay
               remainingSeconds={remainingSeconds}
+              isCompleted={isCompleted}
             />
           </div>
 

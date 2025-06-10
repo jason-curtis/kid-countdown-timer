@@ -9,6 +9,7 @@ export default function Home() {
     isSoundEnabled,
     recentTimes,
     timerPurpose,
+    isCompleted,
     setPresetTime,
     updateEndTime,
     toggleSound,
@@ -37,6 +38,7 @@ export default function Home() {
             isSoundEnabled={isSoundEnabled}
             recentTimes={recentTimes}
             timerPurpose={timerPurpose}
+            isCompleted={isCompleted}
             onSetPresetTime={setPresetTime}
             onUpdateEndTime={updateEndTime}
             onToggleSound={toggleSound}

@@ -13,6 +13,7 @@ export interface TimerState {
   isSoundEnabled: boolean;
   recentTimes: string[];
   timerPurpose: string;
+  isCompleted: boolean;
 }
 
 const HOUR_IN_SECONDS = 3600;
@@ -25,6 +26,7 @@ export function useTimer() {
   const [remainingSeconds, setRemainingSeconds] = useState(DEFAULT_MINUTES * 60);
   const [endTime, setEndTime] = useState<Date | null>(null);
   const [isSoundEnabled, setIsSoundEnabled] = useState(true);
+  const [isCompleted, setIsCompleted] = useState(false);
   const [timerPurpose, setTimerPurpose] = useState(() => {
     try {
       return localStorage.getItem(TIMER_PURPOSE_KEY) || 'school';
@@ -50,7 +52,8 @@ export function useTimer() {
     endTime,
     isSoundEnabled,
     recentTimes,
-    timerPurpose
+    timerPurpose,
+    isCompleted
   });
 
   // Update the ref whenever the state changes
@@ -60,9 +63,10 @@ export function useTimer() {
       endTime,
       isSoundEnabled,
       recentTimes,
-      timerPurpose
+      timerPurpose,
+      isCompleted
     };
-  }, [remainingSeconds, endTime, isSoundEnabled, recentTimes, timerPurpose]);
+  }, [remainingSeconds, endTime, isSoundEnabled, recentTimes, timerPurpose, isCompleted]);
 
   // Initialize the timer with default end time (current time + DEFAULT_MINUTES)
   useEffect(() => {
@@ -90,9 +94,9 @@ export function useTimer() {
   // Set up the countdown interval - always running, calculating from end time
   useEffect(() => {
     const interval = window.setInterval(() => {
-      const { endTime, isSoundEnabled, timerPurpose } = timerStateRef.current;
+      const { endTime, isSoundEnabled, timerPurpose, isCompleted } = timerStateRef.current;
 
-      if (!endTime) return;
+      if (!endTime || isCompleted) return;
 
       const now = new Date();
       const diffMs = endTime.getTime() - now.getTime();
@@ -101,7 +105,8 @@ export function useTimer() {
       setRemainingSeconds(newRemainingSeconds);
 
       if (newRemainingSeconds <= 0) {
-        // Timer complete
+        // Timer complete - set completion state and play alert once
+        setIsCompleted(true);
         if (isSoundEnabled) {
           speak(`Time is up! It's time for ${timerPurpose}!`);
         }
@@ -123,16 +128,18 @@ export function useTimer() {
     const now = new Date();
     const futureTime = new Date(now.getTime() + DEFAULT_MINUTES * 60 * 1000);
     setEndTime(futureTime);
+    setIsCompleted(false);
   }, []);
 
   const setPresetTime = useCallback((minutes: number) => {
     const newSeconds = minutes * 60;
     setRemainingSeconds(newSeconds);
 
-    // Update end time
+    // Update end time and reset completion state
     const now = new Date();
     const newEndTime = new Date(now.getTime() + newSeconds * 1000);
     setEndTime(newEndTime);
+    setIsCompleted(false);
   }, []);
 
   // Add a time string to the recent times list
@@ -159,10 +166,11 @@ export function useTimer() {
     const newRemainingSeconds = Math.max(0, Math.floor(diffMs / 1000));
 
     // Cap at 1 hour maximum
-    const cappedSeconds = capRemainingTime(newRemainingSeconds);
+    const cappedSeconds = Math.min(newRemainingSeconds, HOUR_IN_SECONDS);
 
     setRemainingSeconds(cappedSeconds);
     setEndTime(newEndTime);
+    setIsCompleted(false); // Reset completion state when setting new time
 
     // Add this time to recent times
     addToRecentTimes(timeString);
@@ -184,6 +192,7 @@ export function useTimer() {
     isSoundEnabled,
     recentTimes,
     timerPurpose,
+    isCompleted,
     setPresetTime,
     updateEndTime,
     toggleSound,

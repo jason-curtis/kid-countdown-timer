@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 
 interface TimerDisplayProps {
   remainingSeconds: number;
+  isCompleted: boolean;
 }
 
 // Formats seconds to MM:SS format
@@ -11,7 +12,7 @@ function formatTime(seconds: number): string {
   return `${minutes.toString().padStart(2, '0')}:${remainingSeconds.toString().padStart(2, '0')}`;
 }
 
-export function TimerDisplay({ remainingSeconds }: TimerDisplayProps) {
+export function TimerDisplay({ remainingSeconds, isCompleted }: TimerDisplayProps) {
   const formattedTime = formatTime(remainingSeconds);
 
   return (
@@ -24,8 +25,20 @@ export function TimerDisplay({ remainingSeconds }: TimerDisplayProps) {
           {formattedTime}
         </div>
         <div className="text-sm md:text-base lg:text-lg opacity-70">
-          remaining
+          {isCompleted ? "completed!" : "remaining"}
         </div>
+
+        {/* Completion indicator */}
+        {isCompleted && (
+          <motion.div
+            className="mt-2 text-xs md:text-sm px-3 py-1 rounded-full bg-green-100 text-green-700 font-semibold"
+            initial={{ scale: 0 }}
+            animate={{ scale: 1 }}
+            transition={{ duration: 0.3 }}
+          >
+            Time's up!
+          </motion.div>
+        )}
       </div>
     </div>
   );
