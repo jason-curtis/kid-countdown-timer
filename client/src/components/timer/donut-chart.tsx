@@ -3,13 +3,11 @@ import { cn } from "@/lib/utils";
 
 interface DonutChartProps {
   remainingSeconds: number;
-  isRunning: boolean;
   className?: string;
 }
 
 export function DonutChart({
   remainingSeconds,
-  isRunning,
   className,
 }: DonutChartProps) {
   const HOUR_IN_SECONDS = 3600;
@@ -53,19 +51,11 @@ export function DonutChart({
         />
 
         {/* 15-minute markers (4 sections) */}
-        <g>
-          {/* Top marker (0/60 min) */}
-          <line
-            x1="60"
-            y1="20"
-            x2="60"
-            y2="15"
-            stroke="#333"
-            strokeWidth="1.5"
-          />
+        <g className="text-xs font-bold">
+          {/* 0 minutes (top) */}
           <text
             x="60"
-            y="10"
+            y="20"
             textAnchor="middle"
             fill="#333"
             fontSize="7"
@@ -77,17 +67,9 @@ export function DonutChart({
             0
           </text>
 
-          {/* Right marker (15 min) */}
-          <line
-            x1="100"
-            y1="60"
-            x2="105"
-            y2="60"
-            stroke="#333"
-            strokeWidth="1.5"
-          />
+          {/* 15 minutes (right) */}
           <text
-            x="108"
+            x="104"
             y="63"
             textAnchor="start"
             fill="#333"
@@ -100,18 +82,10 @@ export function DonutChart({
             15
           </text>
 
-          {/* Bottom marker (30 min) */}
-          <line
-            x1="60"
-            y1="100"
-            x2="60"
-            y2="105"
-            stroke="#333"
-            strokeWidth="1.5"
-          />
+          {/* 30 minutes (bottom) */}
           <text
             x="60"
-            y="113"
+            y="107"
             textAnchor="middle"
             fill="#333"
             fontSize="7"
@@ -123,15 +97,7 @@ export function DonutChart({
             30
           </text>
 
-          {/* Left marker (45 min) */}
-          <line
-            x1="20"
-            y1="60"
-            x2="15"
-            y2="60"
-            stroke="#333"
-            strokeWidth="1.5"
-          />
+          {/* 45 minutes (left) */}
           <text
             x="12"
             y="63"
@@ -162,8 +128,7 @@ export function DonutChart({
             {/* yellow */}
             <stop offset="50%" stopColor="hsl(54 100% 60%)" />
             {/* brown */}
-            <stop offset="60%" stopColor="hsl(30
-              100% 40%)" />
+            <stop offset="60%" stopColor="hsl(30 100% 40%)" />
             {/* orange */}
             <stop offset="70%" stopColor="hsl(30 100% 60%)" />
             {/* green */}

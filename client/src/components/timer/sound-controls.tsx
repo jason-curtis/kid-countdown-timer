@@ -1,37 +1,50 @@
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { Bell, Clock, Volume2 } from "lucide-react";
-import { speak } from "@/lib/utils";
 
 interface SoundControlsProps {
   isSoundEnabled: boolean;
+  timerPurpose: string;
   onToggleSound: () => void;
 }
 
-export function SoundControls({ 
-  isSoundEnabled, 
-  onToggleSound 
+// Speaks the given text using the Web Speech API
+const speak = (text: string): void => {
+  if ('speechSynthesis' in window) {
+    window.speechSynthesis.cancel();
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.rate = 0.9;
+    utterance.pitch = 1.1;
+    window.speechSynthesis.speak(utterance);
+  }
+};
+
+export function SoundControls({
+  isSoundEnabled,
+  timerPurpose,
+  onToggleSound
 }: SoundControlsProps) {
   const previewFiveMinWarning = () => {
     if (isSoundEnabled) {
-      speak("5 minutes remaining until school time!");
+      speak(`5 minutes remaining until ${timerPurpose} time!`);
     }
   };
 
-  const previewTimeUpAlert = () => {
+  const previewTimesUpAlert = () => {
     if (isSoundEnabled) {
-      speak("Time is up! It's time for school!");
+      speak(`Time is up! It's time for ${timerPurpose}!`);
     }
   };
 
   return (
-    <div className="border-t border-gray-100 pt-4 md:pt-6 lg:pt-8">
+    <div className="p-4 md:p-5 lg:p-6 bg-muted rounded-2xl">
       <div className="flex items-center justify-between">
-        <div className="flex items-center">
-          <Volume2 className="mr-2 h-5 w-5 md:h-6 md:w-6 lg:h-7 lg:w-7" style={{ color: "hsl(339, 100%, 55%)" }} />
-          <Label htmlFor="sound-toggle" className="font-semibold text-base md:text-lg lg:text-xl">Sound Alerts</Label>
+        <div className="flex items-center space-x-2 md:space-x-3 lg:space-x-4">
+          <Volume2 className="h-5 w-5 md:h-6 md:w-6 lg:h-7 lg:w-7 text-foreground" />
+          <Label htmlFor="sound-toggle" className="text-base md:text-lg lg:text-xl font-semibold">
+            Sound Alerts
+          </Label>
         </div>
-        
         <Switch
           id="sound-toggle"
           checked={isSoundEnabled}
@@ -39,28 +52,22 @@ export function SoundControls({
           className="data-[state=checked]:bg-[hsl(95,55%,55%)] h-6 w-11 md:h-7 md:w-14 lg:h-8 lg:w-16"
         />
       </div>
-      
       <div className="mt-3 md:mt-4 lg:mt-5 text-sm md:text-base lg:text-lg flex flex-wrap gap-2 md:gap-3 lg:gap-4">
-        <button 
+        <button
           onClick={previewFiveMinWarning}
           disabled={!isSoundEnabled}
-          className={`bg-[#ffe5ee] px-3 py-1 md:px-4 md:py-2 lg:px-5 lg:py-2.5 rounded-full inline-flex items-center ${
-            isSoundEnabled ? 'cursor-pointer hover:bg-[#ffd6e5] active:bg-[#ffc6db]' : 'opacity-50 cursor-not-allowed'
-          }`} 
-          style={{ color: "hsl(339, 100%, 55%)" }}
+          className="flex items-center gap-1 md:gap-2 px-2 md:px-3 lg:px-4 py-1 md:py-2 lg:py-3 rounded-lg bg-blue-100 hover:bg-blue-200 disabled:opacity-50 disabled:cursor-not-allowed text-xs md:text-sm lg:text-base"
         >
-          <Bell className="h-3 w-3 md:h-4 md:w-4 lg:h-5 lg:w-5 mr-1 md:mr-2" /> 5 min warning
+          <Clock className="h-3 w-3 md:h-4 md:w-4 lg:h-5 lg:w-5" />
+          Preview 5min warning
         </button>
-        
-        <button 
-          onClick={previewTimeUpAlert}
+        <button
+          onClick={previewTimesUpAlert}
           disabled={!isSoundEnabled}
-          className={`bg-[#e8f5d9] px-3 py-1 md:px-4 md:py-2 lg:px-5 lg:py-2.5 rounded-full inline-flex items-center ${
-            isSoundEnabled ? 'cursor-pointer hover:bg-[#daecc7] active:bg-[#cee3b5]' : 'opacity-50 cursor-not-allowed'
-          }`} 
-          style={{ color: "hsl(95, 55%, 35%)" }}
+          className="flex items-center gap-1 md:gap-2 px-2 md:px-3 lg:px-4 py-1 md:py-2 lg:py-3 rounded-lg bg-green-100 hover:bg-green-200 disabled:opacity-50 disabled:cursor-not-allowed text-xs md:text-sm lg:text-base"
         >
-          <Clock className="h-3 w-3 md:h-4 md:w-4 lg:h-5 lg:w-5 mr-1 md:mr-2" /> Time's up alert
+          <Bell className="h-3 w-3 md:h-4 md:w-4 lg:h-5 lg:w-5" />
+          Preview times up alert
         </button>
       </div>
     </div>
