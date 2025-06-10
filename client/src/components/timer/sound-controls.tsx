@@ -13,8 +13,8 @@ const speak = (text: string): void => {
   if ('speechSynthesis' in window) {
     window.speechSynthesis.cancel();
     const utterance = new SpeechSynthesisUtterance(text);
-    utterance.rate = 0.9;
-    utterance.pitch = 2;
+    utterance.rate = 0.8; // slightly slower for easy comprehension
+    utterance.pitch = 2; // higher pitch for kid-friendly sound
     window.speechSynthesis.speak(utterance);
   }
 };
