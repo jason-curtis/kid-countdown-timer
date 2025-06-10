@@ -15,7 +15,6 @@ interface TimerCardProps {
   isSoundEnabled: boolean;
   recentTimes: string[];
   timerPurpose: string;
-  onResetTimer: () => void;
   onSetPresetTime: (minutes: number) => void;
   onUpdateEndTime: (timeString: string) => void;
   onToggleSound: () => void;
@@ -28,7 +27,6 @@ export function TimerCard({
   isSoundEnabled,
   recentTimes,
   timerPurpose,
-  onResetTimer,
   onSetPresetTime,
   onUpdateEndTime,
   onToggleSound,
@@ -122,7 +120,6 @@ export function TimerCard({
             endTimeString={endTimeString}
             recentTimes={recentTimes}
             timerPurpose={timerPurpose}
-            onResetTimer={onResetTimer}
             onSetPresetTime={onSetPresetTime}
             onUpdateEndTime={onUpdateEndTime}
           />

@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { TimePicker } from "@/components/ui/time-picker";
-import { RotateCcw, History, Clock } from "lucide-react";
+import { History, Clock } from "lucide-react";
 import { motion } from "framer-motion";
 import { useState } from "react";
 
@@ -9,7 +9,6 @@ interface TimerControlsProps {
   endTimeString: string;
   recentTimes: string[];
   timerPurpose: string;
-  onResetTimer: () => void;
   onSetPresetTime: (minutes: number) => void;
   onUpdateEndTime: (timeString: string) => void;
 }
@@ -19,7 +18,6 @@ export function TimerControls({
   endTimeString,
   recentTimes,
   timerPurpose,
-  onResetTimer,
   onSetPresetTime,
   onUpdateEndTime
 }: TimerControlsProps) {
@@ -103,19 +101,6 @@ export function TimerControls({
           onClick={() => onSetPresetTime(60)}
         >
           1 hr
-        </Button>
-      </div>
-
-      {/* Reset button only */}
-      <div className="flex justify-center">
-        <Button
-          variant="outline"
-          className="py-6 md:py-7 lg:py-8 px-8 md:px-10 lg:px-12 bg-muted text-foreground rounded-xl font-bold text-lg md:text-xl lg:text-2xl h-auto hover:bg-gray-200"
-          onClick={onResetTimer}
-          aria-label="Reset timer"
-        >
-          <RotateCcw className="mr-3 h-5 w-5 md:h-6 md:w-6 lg:h-7 lg:w-7" />
-          Reset
         </Button>
       </div>
     </div>

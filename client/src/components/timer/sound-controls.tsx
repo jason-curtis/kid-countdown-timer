@@ -14,7 +14,7 @@ const speak = (text: string): void => {
     window.speechSynthesis.cancel();
     const utterance = new SpeechSynthesisUtterance(text);
     utterance.rate = 0.9;
-    utterance.pitch = 1.1;
+    utterance.pitch = 2;
     window.speechSynthesis.speak(utterance);
   }
 };

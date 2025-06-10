@@ -125,12 +125,6 @@ export function useTimer() {
     setEndTime(futureTime);
   }, []);
 
-  const resetTimer = useCallback(() => {
-    setRemainingSeconds(DEFAULT_MINUTES * 60);
-    setEndTime(null);
-    initializeDefaultEndTime();
-  }, [initializeDefaultEndTime]);
-
   const setPresetTime = useCallback((minutes: number) => {
     const newSeconds = minutes * 60;
     setRemainingSeconds(newSeconds);
@@ -190,7 +184,6 @@ export function useTimer() {
     isSoundEnabled,
     recentTimes,
     timerPurpose,
-    resetTimer,
     setPresetTime,
     updateEndTime,
     toggleSound,
