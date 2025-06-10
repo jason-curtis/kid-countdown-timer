@@ -34,7 +34,7 @@ export function SoundControls({ isSoundEnabled, onToggleSound, timerPurpose }: S
           id="sound-toggle"
           checked={isSoundEnabled}
           onCheckedChange={onToggleSound}
-          className="data-[state=checked]:bg-accent h-6 w-11 md:h-7 md:w-14 lg:h-8 lg:w-16"
+          className="data-[state=checked]:bg-accent"
         />
 
         {isSoundEnabled && (
