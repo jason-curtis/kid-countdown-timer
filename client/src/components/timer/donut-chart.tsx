@@ -19,7 +19,7 @@ export function DonutChart({
   return (
     <div className={className ? `relative ${className}` : "relative"}>
       <svg
-        className="w-64 h-64 md:w-80 md:h-80 lg:w-96 lg:h-96"
+        className="w-80 h-80 md:w-96 md:h-96 lg:w-[32rem] lg:h-[32rem] xl:w-[40rem] xl:h-[40rem] 2xl:w-[48rem] 2xl:h-[48rem]"
         viewBox="-5 -5 130 130"
       >
         {/* Outer background circle */}

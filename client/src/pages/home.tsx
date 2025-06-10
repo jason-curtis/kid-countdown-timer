@@ -17,21 +17,21 @@ export default function Home() {
   } = useTimer();
 
   return (
-    <div className="container mx-auto px-4 py-8 flex flex-col items-center justify-center min-h-screen max-w-full">
+    <div className="container mx-auto px-4 py-4 flex flex-col items-center justify-center min-h-screen max-w-none">
       <motion.header
-        className="w-full text-center mb-8"
+        className="w-full text-center mb-4 md:mb-6"
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
       >
-        <h1 className="text-4xl md:text-5xl font-extrabold mb-2 capitalize" style={{ color: "hsl(339, 100%, 55%)" }}>
+        <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold mb-2 capitalize" style={{ color: "hsl(339, 100%, 55%)" }}>
           {timerPurpose} Countdown
         </h1>
-        <p className="text-lg text-foreground">Count down until it's time for {timerPurpose}!</p>
+        <p className="text-lg md:text-xl text-foreground">Count down until it's time for {timerPurpose}!</p>
       </motion.header>
 
-      <div className="w-full max-w-4xl mx-auto flex flex-col md:flex-row justify-center items-center gap-8">
-        <div className="w-full md:w-auto flex-1 flex justify-center">
+      <div className="w-full flex flex-col justify-center items-center flex-1">
+        <div className="w-full flex justify-center">
           <TimerCard
             remainingSeconds={remainingSeconds}
             endTimeString={endTimeString}
@@ -48,7 +48,7 @@ export default function Home() {
       </div>
 
       <motion.footer
-        className="mt-12 text-center text-sm text-foreground opacity-70 w-full"
+        className="mt-4 text-center text-sm text-foreground opacity-70 w-full"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.5, delay: 0.5 }}

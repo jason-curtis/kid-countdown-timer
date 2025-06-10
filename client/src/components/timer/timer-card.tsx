@@ -55,8 +55,8 @@ export function TimerCard({
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
     >
-      <Card className="bg-white rounded-3xl shadow-xl p-6 w-full max-w-full md:max-w-2xl lg:max-w-3xl transition-all duration-300 hover:shadow-2xl">
-        <CardContent className="p-0 space-y-6 md:space-y-8 lg:space-y-10">
+      <Card className="bg-white rounded-3xl shadow-xl p-4 md:p-6 lg:p-8 w-full max-w-none transition-all duration-300 hover:shadow-2xl">
+        <CardContent className="p-0 space-y-4 md:space-y-6 lg:space-y-8">
           {/* Timer Purpose Header */}
           <div className="text-center">
             {isEditingPurpose ? (
@@ -91,7 +91,7 @@ export function TimerCard({
               </div>
             ) : (
               <div className="flex items-center justify-center gap-2">
-                <h3 className="text-2xl md:text-3xl lg:text-4xl font-bold text-foreground capitalize">
+                <h3 className="text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-bold text-foreground capitalize">
                   {timerPurpose} Timer
                 </h3>
                 <Button
@@ -107,7 +107,7 @@ export function TimerCard({
           </div>
 
           {/* Timer Display */}
-          <div className="relative flex justify-center items-center mb-4">
+          <div className="relative flex justify-center items-center mb-4 md:mb-6 lg:mb-8">
             <DonutChart
               remainingSeconds={remainingSeconds}
             />

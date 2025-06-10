@@ -12,24 +12,24 @@ export function TimerDisplay({ remainingSeconds, isCompleted }: TimerDisplayProp
   return (
     <div className="absolute inset-0 flex flex-col items-center justify-center text-center pointer-events-none">
       {/* Light background circle to ensure text visibility */}
-      <div className="absolute bg-white/80 w-[80px] h-[80px] md:w-[100px] md:h-[100px] lg:w-[120px] lg:h-[120px] rounded-full"></div>
+      <div className="absolute bg-white/80 w-[100px] h-[100px] md:w-[120px] md:h-[120px] lg:w-[180px] lg:h-[180px] xl:w-[220px] xl:h-[220px] 2xl:w-[280px] 2xl:h-[280px] rounded-full"></div>
 
       <div className="relative z-10">
         <div
-          className="text-4xl md:text-5xl lg:text-6xl font-bold mb-1"
+          className="text-5xl md:text-6xl lg:text-8xl xl:text-9xl 2xl:text-[10rem] font-bold mb-1 lg:mb-2"
           aria-live="polite"
           aria-label={`${remainingSeconds} seconds remaining`}
         >
           {formattedTime}
         </div>
-        <div className="text-sm md:text-base lg:text-lg opacity-70">
+        <div className="text-base md:text-lg lg:text-2xl xl:text-3xl 2xl:text-4xl opacity-70">
           {isCompleted ? "completed!" : "remaining"}
         </div>
 
         {/* Completion indicator */}
         {isCompleted && (
           <motion.div
-            className="mt-2 text-xs md:text-sm px-3 py-1 rounded-full bg-green-100 text-green-700 font-semibold"
+            className="mt-2 lg:mt-4 text-sm md:text-base lg:text-xl xl:text-2xl px-3 py-1 lg:px-6 lg:py-2 rounded-full bg-green-100 text-green-700 font-semibold"
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}
             transition={{ duration: 0.3 }}
