@@ -1,21 +1,53 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { cn, timeStringToDate, HOUR_IN_SECONDS } from "@/lib/utils";
-import { Plus, Minus, Clock, ChevronDown, AlertTriangle } from "lucide-react";
+import { Clock, AlertTriangle } from "lucide-react";
 
 interface TimePickerProps {
-  value: string; // HH:MM format
+  value: string; // HH:MM format (24-hour)
   onChange: (value: string) => void;
   recentTimes?: string[];
   className?: string;
 }
 
 export function TimePicker({ value, onChange, recentTimes = [], className }: TimePickerProps) {
-  const [isOpen, setIsOpen] = useState(false);
   const [showWarning, setShowWarning] = useState(false);
-  const [hours, minutes] = value.split(':').map(Number);
-  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  // Parse 24-hour time to 12-hour format with error handling
+  const parseTime = (timeValue: string) => {
+    try {
+      const [hours24, minutes] = timeValue.split(':').map(Number);
+
+      // Validate parsed values
+      if (isNaN(hours24) || isNaN(minutes) || hours24 < 0 || hours24 > 23 || minutes < 0 || minutes > 59) {
+        // Fallback to current time
+        const now = new Date();
+        return {
+          hours24: now.getHours(),
+          minutes: now.getMinutes(),
+          isPM: now.getHours() >= 12,
+          hours12: now.getHours() === 0 ? 12 : now.getHours() > 12 ? now.getHours() - 12 : now.getHours()
+        };
+      }
+
+      const isPM = hours24 >= 12;
+      const hours12 = hours24 === 0 ? 12 : hours24 > 12 ? hours24 - 12 : hours24;
+
+      return { hours24, minutes, isPM, hours12 };
+    } catch (error) {
+      // Fallback to current time on any parsing error
+      const now = new Date();
+      return {
+        hours24: now.getHours(),
+        minutes: now.getMinutes(),
+        isPM: now.getHours() >= 12,
+        hours12: now.getHours() === 0 ? 12 : now.getHours() > 12 ? now.getHours() - 12 : now.getHours()
+      };
+    }
+  };
+
+  const { hours24, minutes, isPM, hours12 } = parseTime(value);
 
   // Check if current time would exceed 1 hour limit
   const checkTimeLimit = (timeString: string) => {
@@ -30,153 +62,105 @@ export function TimePicker({ value, onChange, recentTimes = [], className }: Tim
     }
   };
 
-  // Close dropdown when clicking outside
-  useEffect(() => {
-    function handleClickOutside(event: MouseEvent) {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
-        setIsOpen(false);
-      }
-    }
-
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, []);
-
   // Check for time limit warning when value changes
   useEffect(() => {
     const exceedsLimit = checkTimeLimit(value);
     setShowWarning(exceedsLimit);
   }, [value]);
 
-  const updateTime = (newHours: number, newMinutes: number) => {
-    const formattedTime = `${newHours.toString().padStart(2, '0')}:${newMinutes.toString().padStart(2, '0')}`;
+  const updateTime = (newHours12: number, newMinutes: number, newIsPM: boolean) => {
+    // Validate inputs
+    if (newHours12 < 1 || newHours12 > 12 || newMinutes < 0 || newMinutes > 59) {
+      return; // Don't update with invalid values
+    }
+
+    // Convert 12-hour to 24-hour format
+    let hours24;
+    if (newHours12 === 12) {
+      hours24 = newIsPM ? 12 : 0;
+    } else {
+      hours24 = newIsPM ? newHours12 + 12 : newHours12;
+    }
+
+    const formattedTime = `${hours24.toString().padStart(2, '0')}:${newMinutes.toString().padStart(2, '0')}`;
     onChange(formattedTime);
   };
 
-  const handleIncrement = (type: 'hours' | 'minutes') => {
-    if (type === 'hours') {
-      const newHours = (hours + 1) % 24;
-      updateTime(newHours, minutes);
-    } else {
-      const newMinutes = (minutes + 5) % 60;
-      updateTime(hours, newMinutes);
+  const handleHourChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newHour = parseInt(e.target.value);
+    if (!isNaN(newHour) && newHour >= 1 && newHour <= 12) {
+      updateTime(newHour, minutes, isPM);
     }
   };
 
-  const handleDecrement = (type: 'hours' | 'minutes') => {
-    if (type === 'hours') {
-      const newHours = hours === 0 ? 23 : hours - 1;
-      updateTime(newHours, minutes);
-    } else {
-      const newMinutes = minutes === 0 ? 55 : minutes - 5;
-      updateTime(hours, newMinutes);
+  const handleMinuteChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newMinute = parseInt(e.target.value);
+    if (!isNaN(newMinute) && newMinute >= 0 && newMinute <= 59) {
+      updateTime(hours12, newMinute, isPM);
     }
   };
 
-  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const inputValue = event.target.value;
-    // Basic validation for HH:MM format
-    if (/^\d{1,2}:\d{2}$/.test(inputValue)) {
-      const [inputHours, inputMinutes] = inputValue.split(':').map(Number);
-      if (inputHours >= 0 && inputHours <= 23 && inputMinutes >= 0 && inputMinutes <= 59) {
-        onChange(inputValue.padStart(5, '0'));
-      }
-    }
+  const toggleAmPm = () => {
+    updateTime(hours12, minutes, !isPM);
   };
 
   return (
-    <div className={cn("relative", className)} ref={dropdownRef}>
+    <div className={cn("space-y-3", className)}>
       <div className={cn(
-        "flex items-center space-x-2 md:space-x-3 lg:space-x-4 bg-card p-3 md:p-4 lg:p-5 rounded-2xl border shadow-sm transition-colors",
-        showWarning && "border-amber-400 bg-amber-50"
+        "flex items-center justify-center gap-2 p-4 rounded-2xl border shadow-sm transition-colors",
+        showWarning ? "border-amber-400 bg-amber-50" : "bg-card"
       )}>
-        <Clock className="h-5 w-5 md:h-6 md:w-6 lg:h-7 lg:w-7 text-primary" />
+        <Clock className="h-5 w-5 text-primary" />
 
-        {/* Hours */}
-        <div className="flex flex-col items-center space-y-1">
-          <Button
-            size="sm"
-            className="w-10 h-10 md:w-12 md:h-12 lg:w-14 lg:h-14 rounded-lg text-white bg-primary hover:bg-primary/80"
-            onClick={() => handleIncrement('hours')}
-            aria-label="Increase hours"
-          >
-            <Plus className="h-4 w-4 md:h-5 md:w-5 lg:h-6 lg:w-6" />
-          </Button>
-          <span className="text-xl md:text-2xl lg:text-3xl font-bold text-center min-w-[2ch]">
-            {hours.toString().padStart(2, '0')}
-          </span>
-          <Button
-            size="sm"
-            className="w-10 h-10 md:w-12 md:h-12 lg:w-14 lg:h-14 rounded-lg text-white bg-primary hover:bg-primary/80"
-            onClick={() => handleDecrement('hours')}
-            aria-label="Decrease hours"
-          >
-            <Minus className="h-4 w-4 md:h-5 md:w-5 lg:h-6 lg:w-6" />
-          </Button>
-        </div>
-
-        <span className="text-2xl md:text-3xl lg:text-4xl font-bold">:</span>
-
-        {/* Minutes */}
-        <div className="flex flex-col items-center space-y-1">
-          <Button
-            size="sm"
-            className="w-10 h-10 md:w-12 md:h-12 lg:w-14 lg:h-14 rounded-lg text-white bg-primary hover:bg-primary/80"
-            onClick={() => handleIncrement('minutes')}
-            aria-label="Increase minutes"
-          >
-            <Plus className="h-4 w-4 md:h-5 md:w-5 lg:h-6 lg:w-6" />
-          </Button>
-          <span className="text-xl md:text-2xl lg:text-3xl font-bold text-center min-w-[2ch]">
-            {minutes.toString().padStart(2, '0')}
-          </span>
-          <Button
-            size="sm"
-            className="w-10 h-10 md:w-12 md:h-12 lg:w-14 lg:h-14 rounded-lg text-white bg-primary hover:bg-primary/80"
-            onClick={() => handleDecrement('minutes')}
-            aria-label="Decrease minutes"
-          >
-            <Minus className="h-4 w-4 md:h-5 md:w-5 lg:h-6 lg:w-6" />
-          </Button>
-        </div>
-
-        {/* Direct input */}
-        <div className="flex flex-col items-center space-y-1">
-          <label htmlFor="time-input" className="text-xs md:text-sm lg:text-base text-muted-foreground">
-            Or type:
-          </label>
+        {/* Hour input */}
+        <div className="flex flex-col items-center gap-1">
+          <label className="text-xs text-muted-foreground">Hour</label>
           <Input
-            id="time-input"
-            type="text"
-            value={value}
-            onChange={handleInputChange}
-            placeholder="HH:MM"
-            className={cn(
-              "w-16 md:w-20 lg:w-24 text-center text-sm md:text-base lg:text-lg border-none focus:outline-none bg-muted",
-              showWarning && "bg-amber-100"
-            )}
+            type="number"
+            min="1"
+            max="12"
+            value={hours12}
+            onChange={handleHourChange}
+            className="w-16 text-center text-lg font-semibold"
+            aria-label="Hour"
           />
         </div>
 
-        {/* Recent times dropdown button */}
-        {recentTimes.length > 0 && (
+        <span className="text-2xl font-bold mt-6">:</span>
+
+        {/* Minute input */}
+        <div className="flex flex-col items-center gap-1">
+          <label className="text-xs text-muted-foreground">Min</label>
+          <Input
+            type="number"
+            min="0"
+            max="59"
+            value={minutes.toString().padStart(2, '0')}
+            onChange={handleMinuteChange}
+            className="w-16 text-center text-lg font-semibold"
+            aria-label="Minutes"
+          />
+        </div>
+
+        {/* AM/PM toggle */}
+        <div className="flex flex-col items-center gap-1">
+          <label className="text-xs text-muted-foreground">Period</label>
           <Button
-            variant="ghost"
+            type="button"
+            variant={isPM ? "default" : "outline"}
             size="sm"
-            onClick={() => setIsOpen(!isOpen)}
-            className="p-2"
-            aria-label="Show recent times"
+            onClick={toggleAmPm}
+            className="w-16 font-semibold"
+            aria-label={`Switch to ${isPM ? "AM" : "PM"}`}
           >
-            <ChevronDown className={cn("h-4 w-4 transition-transform", isOpen && "transform rotate-180")} />
+            {isPM ? "PM" : "AM"}
           </Button>
-        )}
+        </div>
       </div>
 
       {/* Warning message for time limit */}
       {showWarning && (
-        <div className="mt-2 flex items-center gap-2 p-2 bg-amber-100 border border-amber-200 rounded-lg">
+        <div className="flex items-center gap-2 p-2 bg-amber-100 border border-amber-200 rounded-lg">
           <AlertTriangle className="h-4 w-4 text-amber-600" />
           <span className="text-sm text-amber-800">
             Timer will be capped at 1 hour maximum
@@ -184,22 +168,22 @@ export function TimePicker({ value, onChange, recentTimes = [], className }: Tim
         </div>
       )}
 
-      {/* Recent times dropdown */}
-      {isOpen && recentTimes.length > 0 && (
-        <div className="absolute top-full left-0 right-0 mt-2 bg-card border rounded-lg shadow-lg z-10">
-          <div className="p-2">
-            <p className="text-xs text-muted-foreground mb-2">Recent times:</p>
+      {/* Recent times */}
+      {recentTimes.length > 0 && (
+        <div className="space-y-2">
+          <p className="text-xs text-muted-foreground">Recent times:</p>
+          <div className="flex flex-wrap gap-1">
             {recentTimes.map((time, index) => (
-              <button
+              <Button
                 key={index}
-                onClick={() => {
-                  onChange(time);
-                  setIsOpen(false);
-                }}
-                className="block w-full text-left px-3 py-2 text-sm hover:bg-muted rounded"
+                variant="outline"
+                size="sm"
+                onClick={() => onChange(time)}
+                className="text-xs"
+                aria-label={`Set time to ${time}`}
               >
                 {time}
-              </button>
+              </Button>
             ))}
           </div>
         </div>

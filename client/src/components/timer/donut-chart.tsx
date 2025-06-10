@@ -1,5 +1,4 @@
 import { motion } from "framer-motion";
-import { cn } from "@/lib/utils";
 import { HOUR_IN_SECONDS } from "@/lib/utils";
 
 interface DonutChartProps {
@@ -18,7 +17,7 @@ export function DonutChart({
   const dashOffset = CIRCUMFERENCE * (1 - percentRemaining);
 
   return (
-    <div className={cn("relative", className)}>
+    <div className={className ? `relative ${className}` : "relative"}>
       <svg
         className="w-64 h-64 md:w-80 md:h-80 lg:w-96 lg:h-96"
         viewBox="-5 -5 130 130"

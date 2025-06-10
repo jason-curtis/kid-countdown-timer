@@ -12,12 +12,12 @@ interface SoundControlsProps {
 export function SoundControls({ isSoundEnabled, onToggleSound, timerPurpose }: SoundControlsProps) {
   const testSound = () => {
     if (isSoundEnabled) {
-      speak(`Sound test! This is what you'll hear when your ${timerPurpose} timer is up.`);
+      speak(`Sound test for your ${timerPurpose} timer.`);
     }
   };
 
   return (
-    <div className="flex flex-col items-center space-y-4">
+    <div className="flex items-center justify-center">
       <div className="flex items-center space-x-3 bg-card p-4 rounded-lg border">
         <div className="flex items-center space-x-2">
           {isSoundEnabled ? (
@@ -36,18 +36,18 @@ export function SoundControls({ isSoundEnabled, onToggleSound, timerPurpose }: S
           onCheckedChange={onToggleSound}
           className="data-[state=checked]:bg-accent h-6 w-11 md:h-7 md:w-14 lg:h-8 lg:w-16"
         />
-      </div>
 
-      {isSoundEnabled && (
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={testSound}
-          className="text-sm"
-        >
-          Test Sound
-        </Button>
-      )}
+        {isSoundEnabled && (
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={testSound}
+            className="text-sm ml-2"
+          >
+            Test
+          </Button>
+        )}
+      </div>
     </div>
   );
 }

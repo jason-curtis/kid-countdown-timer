@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from "react";
-import { speak, formatTime, formatTimeForInput, timeStringToDate, HOUR_IN_SECONDS } from "@/lib/utils";
+import { speak, formatTimeForInput, timeStringToDate, HOUR_IN_SECONDS } from "@/lib/utils";
 
 export interface TimerState {
   remainingSeconds: number;
@@ -49,6 +49,13 @@ export function useTimer() {
     isCompleted
   });
 
+  const initializeDefaultEndTime = useCallback(() => {
+    const now = new Date();
+    const futureTime = new Date(now.getTime() + DEFAULT_MINUTES * 60 * 1000);
+    setEndTime(futureTime);
+    setIsCompleted(false);
+  }, []);
+
   // Update the ref whenever the state changes
   useEffect(() => {
     timerStateRef.current = {
@@ -64,7 +71,7 @@ export function useTimer() {
   // Initialize the timer with default end time (current time + DEFAULT_MINUTES)
   useEffect(() => {
     initializeDefaultEndTime();
-  }, []);
+  }, [initializeDefaultEndTime]);
 
   // Save recent times to localStorage whenever they change
   useEffect(() => {
@@ -115,13 +122,6 @@ export function useTimer() {
     return () => {
       clearInterval(interval);
     };
-  }, []);
-
-  const initializeDefaultEndTime = useCallback(() => {
-    const now = new Date();
-    const futureTime = new Date(now.getTime() + DEFAULT_MINUTES * 60 * 1000);
-    setEndTime(futureTime);
-    setIsCompleted(false);
   }, []);
 
   const setPresetTime = useCallback((minutes: number) => {

@@ -15,7 +15,11 @@ export function TimerDisplay({ remainingSeconds, isCompleted }: TimerDisplayProp
       <div className="absolute bg-white/80 w-[80px] h-[80px] md:w-[100px] md:h-[100px] lg:w-[120px] lg:h-[120px] rounded-full"></div>
 
       <div className="relative z-10">
-        <div className="text-4xl md:text-5xl lg:text-6xl font-bold mb-1">
+        <div
+          className="text-4xl md:text-5xl lg:text-6xl font-bold mb-1"
+          aria-live="polite"
+          aria-label={`${remainingSeconds} seconds remaining`}
+        >
           {formattedTime}
         </div>
         <div className="text-sm md:text-base lg:text-lg opacity-70">
@@ -29,6 +33,8 @@ export function TimerDisplay({ remainingSeconds, isCompleted }: TimerDisplayProp
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}
             transition={{ duration: 0.3 }}
+            role="status"
+            aria-live="assertive"
           >
             Time's up!
           </motion.div>
