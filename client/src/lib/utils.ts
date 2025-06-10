@@ -57,8 +57,8 @@ export function speak(text: string): void {
     window.speechSynthesis.cancel();
     
     const utterance = new SpeechSynthesisUtterance(text);
-    utterance.rate = 0.9; // Slightly slower for kids
-    utterance.pitch = 1.1; // Slightly higher pitch for kid-friendly sound
+    utterance.rate = 0.8; // Slightly slower for kids
+    utterance.pitch = 2; // Higher pitch for kid-friendly sound
     window.speechSynthesis.speak(utterance);
   }
 }
