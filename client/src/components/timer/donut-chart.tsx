@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
+import { HOUR_IN_SECONDS } from "@/lib/utils";
 
 interface DonutChartProps {
   remainingSeconds: number;
@@ -10,7 +11,6 @@ export function DonutChart({
   remainingSeconds,
   className,
 }: DonutChartProps) {
-  const HOUR_IN_SECONDS = 3600;
   const CIRCUMFERENCE = 2 * Math.PI * 35; // 2πr where r=35 (smaller to leave space for ticks)
 
   // Calculate the percentage remaining of a full hour

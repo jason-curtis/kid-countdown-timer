@@ -5,6 +5,9 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
+// Timer-related constants
+export const HOUR_IN_SECONDS = 3600;
+
 // Formats seconds to MM:SS format
 export function formatTime(seconds: number): string {
   const minutes = Math.floor(seconds / 60);

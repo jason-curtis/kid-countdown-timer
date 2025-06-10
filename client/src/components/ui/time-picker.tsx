@@ -1,106 +1,173 @@
-import * as React from "react";
-import { cn } from "@/lib/utils";
+import { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Plus, Minus } from "lucide-react";
+import { cn } from "@/lib/utils";
+import { Plus, Minus, Clock, ChevronDown } from "lucide-react";
 
 interface TimePickerProps {
-  className?: string;
-  value?: string;
+  value: string; // HH:MM format
   onChange: (value: string) => void;
-  label?: string;
-  description?: string;
+  recentTimes?: string[];
+  className?: string;
 }
 
-export function TimePicker({
-  className,
-  onChange,
-  value,
-  label,
-  description,
+export function TimePicker({ value, onChange, recentTimes = [], className }: TimePickerProps) {
+  const [isOpen, setIsOpen] = useState(false);
+  const [hours, minutes] = value.split(':').map(Number);
+  const dropdownRef = useRef<HTMLDivElement>(null);
 
-}: TimePickerProps) {
-  const inputRef = React.useRef<HTMLInputElement>(null);
-
-  const handleIncrement = () => {
-    if (!inputRef.current) return;
-    
-    const [hours, minutes] = inputRef.current.value.split(':').map(Number);
-    
-    // Add 5 minutes
-    let newMinutes = minutes + 5;
-    let newHours = hours;
-    
-    if (newMinutes >= 60) {
-      newMinutes = newMinutes % 60;
-      newHours = (newHours + 1) % 24;
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setIsOpen(false);
+      }
     }
-    
-    const newValue = `${newHours.toString().padStart(2, '0')}:${newMinutes.toString().padStart(2, '0')}`;
-    inputRef.current.value = newValue;
-    onChange(newValue);
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
+  const updateTime = (newHours: number, newMinutes: number) => {
+    const formattedTime = `${newHours.toString().padStart(2, '0')}:${newMinutes.toString().padStart(2, '0')}`;
+    onChange(formattedTime);
   };
 
-  const handleDecrement = () => {
-    if (!inputRef.current) return;
-    
-    const [hours, minutes] = inputRef.current.value.split(':').map(Number);
-    
-    // Subtract 5 minutes
-    let newMinutes = minutes - 5;
-    let newHours = hours;
-    
-    if (newMinutes < 0) {
-      newMinutes = 60 + newMinutes;
-      newHours = (newHours - 1 + 24) % 24;
+  const handleIncrement = (type: 'hours' | 'minutes') => {
+    if (type === 'hours') {
+      const newHours = (hours + 1) % 24;
+      updateTime(newHours, minutes);
+    } else {
+      const newMinutes = (minutes + 5) % 60;
+      updateTime(hours, newMinutes);
     }
-    
-    const newValue = `${newHours.toString().padStart(2, '0')}:${newMinutes.toString().padStart(2, '0')}`;
-    inputRef.current.value = newValue;
-    onChange(newValue);
+  };
+
+  const handleDecrement = (type: 'hours' | 'minutes') => {
+    if (type === 'hours') {
+      const newHours = hours === 0 ? 23 : hours - 1;
+      updateTime(newHours, minutes);
+    } else {
+      const newMinutes = minutes === 0 ? 55 : minutes - 5;
+      updateTime(hours, newMinutes);
+    }
+  };
+
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const inputValue = event.target.value;
+    // Basic validation for HH:MM format
+    if (/^\d{1,2}:\d{2}$/.test(inputValue)) {
+      const [inputHours, inputMinutes] = inputValue.split(':').map(Number);
+      if (inputHours >= 0 && inputHours <= 23 && inputMinutes >= 0 && inputMinutes <= 59) {
+        onChange(inputValue.padStart(5, '0'));
+      }
+    }
   };
 
   return (
-    <div className={cn("space-y-1", className)}>
-      {label && <div className="text-sm font-medium">{label}</div>}
-      <div className="flex items-center justify-between bg-muted rounded-xl p-2 md:p-3 lg:p-4">
-        <Button 
-          type="button"
-          variant="default"
-          size="icon"
-          className="w-10 h-10 md:w-12 md:h-12 lg:w-14 lg:h-14 rounded-lg text-white hover:bg-[hsl(339,100%,65%)]"
-          style={{ backgroundColor: "hsl(339, 100%, 75%)" }}
-          onClick={handleDecrement}
-          aria-label="Decrease time"
-        >
-          <Minus className="h-4 w-4 md:h-5 md:w-5 lg:h-6 lg:w-6" />
-        </Button>
-        
-        <div className="text-center">
-          <Input
-            ref={inputRef}
-            type="time"
-            className="text-center bg-transparent text-xl md:text-2xl lg:text-3xl font-semibold w-32 md:w-40 lg:w-48 focus:outline-none border-none"
-            value={value as string}
-            onChange={(e) => onChange(e.target.value)}
-          />
-          {description && (
-            <div className="text-xs md:text-sm lg:text-base mt-1 md:mt-2 text-foreground opacity-70">{description}</div>
-          )}
+    <div className={cn("relative", className)} ref={dropdownRef}>
+      <div className="flex items-center space-x-2 md:space-x-3 lg:space-x-4 bg-card p-3 md:p-4 lg:p-5 rounded-2xl border shadow-sm">
+        <Clock className="h-5 w-5 md:h-6 md:w-6 lg:h-7 lg:w-7 text-primary" />
+
+        {/* Hours */}
+        <div className="flex flex-col items-center space-y-1">
+          <Button
+            size="sm"
+            className="w-10 h-10 md:w-12 md:h-12 lg:w-14 lg:h-14 rounded-lg text-white bg-primary hover:bg-primary/80"
+            onClick={() => handleIncrement('hours')}
+            aria-label="Increase hours"
+          >
+            <Plus className="h-4 w-4 md:h-5 md:w-5 lg:h-6 lg:w-6" />
+          </Button>
+          <span className="text-xl md:text-2xl lg:text-3xl font-bold text-center min-w-[2ch]">
+            {hours.toString().padStart(2, '0')}
+          </span>
+          <Button
+            size="sm"
+            className="w-10 h-10 md:w-12 md:h-12 lg:w-14 lg:h-14 rounded-lg text-white bg-primary hover:bg-primary/80"
+            onClick={() => handleDecrement('hours')}
+            aria-label="Decrease hours"
+          >
+            <Minus className="h-4 w-4 md:h-5 md:w-5 lg:h-6 lg:w-6" />
+          </Button>
         </div>
-        
-        <Button 
-          type="button"
-          variant="default"
-          size="icon"
-          className="w-10 h-10 md:w-12 md:h-12 lg:w-14 lg:h-14 rounded-lg text-white hover:bg-[hsl(339,100%,65%)]"
-          style={{ backgroundColor: "hsl(339, 100%, 75%)" }}
-          onClick={handleIncrement}
-          aria-label="Increase time"
-        >
-          <Plus className="h-4 w-4 md:h-5 md:w-5 lg:h-6 lg:w-6" />
-        </Button>
+
+        <span className="text-2xl md:text-3xl lg:text-4xl font-bold">:</span>
+
+        {/* Minutes */}
+        <div className="flex flex-col items-center space-y-1">
+          <Button
+            size="sm"
+            className="w-10 h-10 md:w-12 md:h-12 lg:w-14 lg:h-14 rounded-lg text-white bg-primary hover:bg-primary/80"
+            onClick={() => handleIncrement('minutes')}
+            aria-label="Increase minutes"
+          >
+            <Plus className="h-4 w-4 md:h-5 md:w-5 lg:h-6 lg:w-6" />
+          </Button>
+          <span className="text-xl md:text-2xl lg:text-3xl font-bold text-center min-w-[2ch]">
+            {minutes.toString().padStart(2, '0')}
+          </span>
+          <Button
+            size="sm"
+            className="w-10 h-10 md:w-12 md:h-12 lg:w-14 lg:h-14 rounded-lg text-white bg-primary hover:bg-primary/80"
+            onClick={() => handleDecrement('minutes')}
+            aria-label="Decrease minutes"
+          >
+            <Minus className="h-4 w-4 md:h-5 md:w-5 lg:h-6 lg:w-6" />
+          </Button>
+        </div>
+
+        {/* Direct input */}
+        <div className="flex flex-col items-center space-y-1">
+          <label htmlFor="time-input" className="text-xs md:text-sm lg:text-base text-muted-foreground">
+            Or type:
+          </label>
+          <Input
+            id="time-input"
+            type="text"
+            value={value}
+            onChange={handleInputChange}
+            placeholder="HH:MM"
+            className="w-16 md:w-20 lg:w-24 text-center text-sm md:text-base lg:text-lg border-none focus:outline-none bg-muted"
+          />
+        </div>
+
+        {/* Recent times dropdown button */}
+        {recentTimes.length > 0 && (
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => setIsOpen(!isOpen)}
+            className="p-2"
+            aria-label="Show recent times"
+          >
+            <ChevronDown className={cn("h-4 w-4 transition-transform", isOpen && "transform rotate-180")} />
+          </Button>
+        )}
       </div>
+
+      {/* Recent times dropdown */}
+      {isOpen && recentTimes.length > 0 && (
+        <div className="absolute top-full left-0 right-0 mt-2 bg-card border rounded-lg shadow-lg z-10">
+          <div className="p-2">
+            <p className="text-xs text-muted-foreground mb-2">Recent times:</p>
+            {recentTimes.map((time, index) => (
+              <button
+                key={index}
+                onClick={() => {
+                  onChange(time);
+                  setIsOpen(false);
+                }}
+                className="block w-full text-left px-3 py-2 text-sm hover:bg-muted rounded"
+              >
+                {time}
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
     </div>
   );
 }

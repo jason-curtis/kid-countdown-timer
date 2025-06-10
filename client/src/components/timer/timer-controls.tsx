@@ -80,24 +80,21 @@ export function TimerControls({
       <div className="grid grid-cols-3 gap-2 md:gap-3 lg:gap-4">
         <Button
           variant="secondary"
-          className="py-2 md:py-3 px-4 text-foreground font-semibold text-sm md:text-base lg:text-lg"
-          style={{ backgroundColor: "hsl(54, 100%, 60%)" }}
+          className="py-2 md:py-3 px-4 text-foreground font-semibold text-sm md:text-base lg:text-lg bg-secondary hover:bg-secondary/80"
           onClick={() => onSetPresetTime(5)}
         >
           5 min
         </Button>
         <Button
           variant="secondary"
-          className="py-2 md:py-3 px-4 text-foreground font-semibold text-sm md:text-base lg:text-lg"
-          style={{ backgroundColor: "hsl(54, 100%, 60%)" }}
+          className="py-2 md:py-3 px-4 text-foreground font-semibold text-sm md:text-base lg:text-lg bg-secondary hover:bg-secondary/80"
           onClick={() => onSetPresetTime(10)}
         >
           10 min
         </Button>
         <Button
           variant="secondary"
-          className="py-2 md:py-3 px-4 text-foreground font-semibold text-sm md:text-base lg:text-lg"
-          style={{ backgroundColor: "hsl(54, 100%, 60%)" }}
+          className="py-2 md:py-3 px-4 text-foreground font-semibold text-sm md:text-base lg:text-lg bg-secondary hover:bg-secondary/80"
           onClick={() => onSetPresetTime(60)}
         >
           1 hr
