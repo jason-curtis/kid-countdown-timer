@@ -6,6 +6,8 @@ import { TimerControls } from "./timer-controls";
 import { TimerDisplay } from "./timer-display";
 import { SoundControls } from "./sound-controls";
 import { ShareLink } from "./share-link";
+import { GradientEditor } from "./gradient-editor";
+import { useGradient } from "@/hooks/use-gradient";
 import { motion } from "framer-motion";
 import { Edit2, Check, X } from "lucide-react";
 import { useState } from "react";
@@ -37,6 +39,9 @@ export function TimerCard({
 }: TimerCardProps) {
   const [isEditingPurpose, setIsEditingPurpose] = useState(false);
   const [editPurpose, setEditPurpose] = useState(timerPurpose);
+  const [isGradientEditorOpen, setIsGradientEditorOpen] = useState(false);
+
+  const { gradient, setGradient } = useGradient();
 
   const handleSavePurpose = () => {
     if (editPurpose.trim()) {
@@ -111,6 +116,7 @@ export function TimerCard({
           <div className="relative flex justify-center items-center mb-4 md:mb-6 lg:mb-8">
             <DonutChart
               remainingSeconds={remainingSeconds}
+              gradient={gradient}
             />
             <TimerDisplay
               remainingSeconds={remainingSeconds}
@@ -133,6 +139,14 @@ export function TimerCard({
             isSoundEnabled={isSoundEnabled}
             onToggleSound={onToggleSound}
             timerPurpose={timerPurpose}
+          />
+
+          {/* Gradient Editor */}
+          <GradientEditor
+            gradient={gradient}
+            onChange={setGradient}
+            isOpen={isGradientEditorOpen}
+            onToggle={() => setIsGradientEditorOpen(!isGradientEditorOpen)}
           />
 
           {/* Share Link */}

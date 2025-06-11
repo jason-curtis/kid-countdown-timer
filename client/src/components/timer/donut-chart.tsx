@@ -1,20 +1,85 @@
 import { motion } from "framer-motion";
 import { HOUR_IN_SECONDS } from "@/lib/time";
+import { GradientConfig } from "./gradient-editor";
 
 interface DonutChartProps {
   remainingSeconds: number;
   className?: string;
+  gradient?: GradientConfig;
 }
 
 export function DonutChart({
   remainingSeconds,
   className,
+  gradient,
 }: DonutChartProps) {
   const CIRCUMFERENCE = 2 * Math.PI * 35; // 2πr where r=35 (smaller to leave space for ticks)
 
   // Calculate the percentage remaining of a full hour
   const percentRemaining = remainingSeconds / HOUR_IN_SECONDS;
   const dashOffset = CIRCUMFERENCE * (1 - percentRemaining);
+
+  // Default gradient if none provided
+  const defaultGradient: GradientConfig = {
+    type: 'linear',
+    direction: '0deg',
+    stops: [
+      { offset: 0, color: 'hsl(280 100% 75%)' },
+      { offset: 18, color: 'hsl(0 100% 65%)' },
+      { offset: 25, color: 'hsl(305, 100%, 36%)' },
+      { offset: 37, color: 'hsl(339 0% 70%)' },
+      { offset: 43, color: 'hsl(330 100% 50%)' },
+      { offset: 50, color: 'hsl(54 100% 60%)' },
+      { offset: 60, color: 'hsl(30 100% 40%)' },
+      { offset: 70, color: 'hsl(30 100% 60%)' },
+      { offset: 80, color: 'hsl(95 50% 60%)' },
+      { offset: 90, color: 'hsl(240 80% 60%)' },
+      { offset: 100, color: 'hsl(180 80% 60%)' },
+    ]
+  };
+
+  const currentGradient = gradient || defaultGradient;
+
+  // Generate SVG gradient definition
+  const generateSvgGradient = (grad: GradientConfig) => {
+    if (grad.type === 'radial') {
+      return (
+        <radialGradient id="timerGradient" cx="50%" cy="50%" r="50%">
+          {grad.stops.map((stop, index) => (
+            <stop
+              key={index}
+              offset={`${stop.offset}%`}
+              stopColor={stop.color}
+            />
+          ))}
+        </radialGradient>
+      );
+    } else {
+      // Convert CSS angle to SVG coordinates
+      const angle = parseInt(grad.direction?.replace('deg', '') || '0');
+      const radians = (angle * Math.PI) / 180;
+      const x2 = Math.cos(radians) * 100;
+      const y2 = Math.sin(radians) * 100;
+
+      return (
+        <linearGradient
+          id="timerGradient"
+          x1="0%"
+          y1="0%"
+          x2={`${x2}%`}
+          y2={`${y2}%`}
+        >
+          {grad.stops.map((stop, index) => (
+            <stop
+              key={index}
+              offset={`${stop.offset}%`}
+              stopColor={stop.color}
+            />
+          ))}
+        </linearGradient>
+      );
+    }
+  };
 
   return (
     <div className={className ? `relative ${className}` : "relative"}>
@@ -114,29 +179,7 @@ export function DonutChart({
 
         {/* Gradient definition for timer circle */}
         <defs>
-          <linearGradient id="timerGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-            {/* purple */}
-            <stop offset="0%" stopColor="hsl(280 100% 75%)" />
-            {/* red */}
-            <stop offset="18%" stopColor="hsl(0 100% 65%)" />
-            {/* pink */}
-            <stop offset="25%" stopColor="hsl(305, 100%, 36%)" />
-            {/* gray */}
-            <stop offset="37%" stopColor="hsl(339 0% 70%)" />
-            <stop offset="43%" stopColor="hsl(330 100% 50%)" />
-            {/* yellow */}
-            <stop offset="50%" stopColor="hsl(54 100% 60%)" />
-            {/* brown */}
-            <stop offset="60%" stopColor="hsl(30 100% 40%)" />
-            {/* orange */}
-            <stop offset="70%" stopColor="hsl(30 100% 60%)" />
-            {/* green */}
-            <stop offset="80%" stopColor="hsl(95 50% 60%)" />
-            {/* dark blue */}
-            <stop offset="90%" stopColor="hsl(240 80% 60%)" />
-            {/* light blue */}
-            <stop offset="100%" stopColor="hsl(180 80% 60%)" />
-          </linearGradient>
+          {generateSvgGradient(currentGradient)}
         </defs>
       </svg>
     </div>
