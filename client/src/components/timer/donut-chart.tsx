@@ -42,9 +42,17 @@ export function DonutChart({
 
   // Generate SVG gradient definition
   const generateSvgGradient = (grad: GradientConfig) => {
-    if (grad.type === 'radial') {
+    if (grad.type === 'conic') {
+      // For conic gradients, we'll use a linear gradient around the circle
+      // SVG doesn't natively support conic gradients, but this approximates it well
       return (
-        <radialGradient id="timerGradient" cx="50%" cy="50%" r="50%">
+        <linearGradient
+          id="timerGradient"
+          x1="0%"
+          y1="0%"
+          x2="100%"
+          y2="100%"
+        >
           {grad.stops.map((stop, index) => (
             <stop
               key={index}
@@ -52,7 +60,7 @@ export function DonutChart({
               stopColor={stop.color}
             />
           ))}
-        </radialGradient>
+        </linearGradient>
       );
     } else {
       // Convert CSS angle to SVG coordinates

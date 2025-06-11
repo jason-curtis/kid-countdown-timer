@@ -13,7 +13,7 @@ export interface GradientStop {
 }
 
 export interface GradientConfig {
-    type: 'linear' | 'radial';
+    type: 'linear' | 'conic';
     stops: GradientStop[];
     direction?: string; // For linear gradients: "0deg", "90deg", etc.
 }
@@ -71,12 +71,15 @@ const GRADIENT_PRESETS: { name: string; gradient: GradientConfig }[] = [
         }
     },
     {
-        name: "Forest",
+        name: "Spiral",
         gradient: {
-            type: 'radial',
+            type: 'conic',
             stops: [
-                { offset: 0, color: '#56ab2f' },
-                { offset: 100, color: '#a8e6cf' },
+                { offset: 0, color: '#ff6b6b' },
+                { offset: 25, color: '#4ecdc4' },
+                { offset: 50, color: '#45b7d1' },
+                { offset: 75, color: '#96ceb4' },
+                { offset: 100, color: '#ff6b6b' },
             ]
         }
     }
@@ -127,8 +130,8 @@ export function GradientEditor({ gradient, onChange, isOpen, onToggle }: Gradien
             .map(stop => `${stop.color} ${stop.offset}%`)
             .join(', ');
 
-        if (grad.type === 'radial') {
-            return `radial-gradient(circle, ${stopsString})`;
+        if (grad.type === 'conic') {
+            return `conic-gradient(from 0deg at center, ${stopsString})`;
         } else {
             const direction = grad.direction || '0deg';
             return `linear-gradient(${direction}, ${stopsString})`;
@@ -211,11 +214,11 @@ export function GradientEditor({ gradient, onChange, isOpen, onToggle }: Gradien
                                     Linear
                                 </Button>
                                 <Button
-                                    variant={gradient.type === 'radial' ? 'default' : 'outline'}
+                                    variant={gradient.type === 'conic' ? 'default' : 'outline'}
                                     size="sm"
-                                    onClick={() => onChange({ ...gradient, type: 'radial' })}
+                                    onClick={() => onChange({ ...gradient, type: 'conic' })}
                                 >
-                                    Radial
+                                    Conic
                                 </Button>
                             </div>
                         </div>
