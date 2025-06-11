@@ -5,6 +5,7 @@ import { DonutChart } from "./donut-chart";
 import { TimerControls } from "./timer-controls";
 import { TimerDisplay } from "./timer-display";
 import { SoundControls } from "./sound-controls";
+import { ShareLink } from "./share-link";
 import { motion } from "framer-motion";
 import { Edit2, Check, X } from "lucide-react";
 import { useState } from "react";
@@ -132,6 +133,12 @@ export function TimerCard({
             isSoundEnabled={isSoundEnabled}
             onToggleSound={onToggleSound}
             timerPurpose={timerPurpose}
+          />
+
+          {/* Share Link */}
+          <ShareLink
+            timerPurpose={timerPurpose}
+            endTimeString={endTimeString}
           />
         </CardContent>
       </Card>
