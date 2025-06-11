@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from "react";
-import { speak, formatTimeForInput, timeStringToDate, HOUR_IN_SECONDS } from "@/lib/utils";
+import { speak } from "@/lib/speech";
+import { formatTimeForInput, timeStringToDate, HOUR_IN_SECONDS } from "@/lib/time";
 
 export interface TimerState {
   remainingSeconds: number;

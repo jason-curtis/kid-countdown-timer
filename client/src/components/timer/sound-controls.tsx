@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import { Volume2, VolumeX } from "lucide-react";
-import { speak } from "@/lib/utils";
+import { speak } from "@/lib/speech";
 
 interface SoundControlsProps {
   isSoundEnabled: boolean;

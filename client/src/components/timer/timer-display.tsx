@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { formatTime } from "@/lib/utils";
+import { formatTime } from "@/lib/time";
 
 interface TimerDisplayProps {
   remainingSeconds: number;

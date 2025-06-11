@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { cn, timeStringToDate, HOUR_IN_SECONDS } from "@/lib/utils";
+import { cn } from "@/lib/classnames";
+import { timeStringToDate, HOUR_IN_SECONDS } from "@/lib/time";
 import { Clock, AlertTriangle } from "lucide-react";
 
 interface TimePickerProps {

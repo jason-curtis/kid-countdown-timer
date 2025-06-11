@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { HOUR_IN_SECONDS } from "@/lib/utils";
+import { HOUR_IN_SECONDS } from "@/lib/time";
 
 interface DonutChartProps {
   remainingSeconds: number;
