@@ -1,2 +1,3 @@
 don't simplify the donut chart gradient. it's supposed to look weird. sorry.
-Use vibe-tools to take screenshots and test the app. Once you are satisfied with the behavior for a particular feature, commit with git.
+When making functional changes, use vibe-tools to take screenshots and test the app. Once you are satisfied with the behavior for a particular feature, commit with git.
+When creating a git commit, start the commit message with 🤖 to indicate that the commit is automated.
