@@ -45,6 +45,8 @@ jobs:
 
       - name: Build
         run: pnpm build
+        env:
+          DEPLOY_PATH: /${{ github.event.repository.name }}/
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
