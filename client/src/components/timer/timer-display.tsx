@@ -17,6 +17,10 @@ export function TimerDisplay({ remainingSeconds, isCompleted }: TimerDisplayProp
       <div className="relative z-10">
         <div
           className="text-5xl md:text-6xl lg:text-8xl xl:text-9xl 2xl:text-[10rem] font-bold mb-1 lg:mb-2"
+          style={{ 
+            fontFamily: '"JetBrains Mono", "Fira Code", "SF Mono", "Monaco", "Inconsolata", "Roboto Mono", "Source Code Pro", "Droid Sans Mono", "Courier New", monospace',
+            fontFeatureSettings: '"tnum" 1, "zero" 1'
+          }}
           aria-live="polite"
           aria-label={`${remainingSeconds} seconds remaining`}
         >
