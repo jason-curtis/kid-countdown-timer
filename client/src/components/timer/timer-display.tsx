@@ -17,6 +17,12 @@ export function TimerDisplay({ remainingSeconds, isCompleted }: TimerDisplayProp
       <div className="relative z-10">
         <div
           className="text-5xl md:text-6xl lg:text-8xl xl:text-9xl 2xl:text-[10rem] font-bold mb-1 lg:mb-2"
+          style={{ 
+            width: '4.5em',
+            textAlign: 'center',
+            letterSpacing: '0.05em',
+            display: 'inline-block'
+          }}
           aria-live="polite"
           aria-label={`${remainingSeconds} seconds remaining`}
         >
